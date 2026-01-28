@@ -6,12 +6,8 @@ import lombok.Data;
 
 @Data
 public class UpdateUserRequest {
-    @NotNull(message = "ID обязателен для обновления")
-    @Positive(message = "ID должен быть положительным")
-    private Long id;
 
-    @Email(message = "Некорректный формат email")
-    @NotBlank(message = "Email не может быть пустым")
+
     private String email;
 
     private String name;

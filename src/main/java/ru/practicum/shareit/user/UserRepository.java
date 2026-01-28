@@ -41,6 +41,11 @@ public class UserRepository implements UserStorage {
 
     @Override
     public Optional<User> findByEmail(String email) {
+        for (User u : users.values()) {
+            if (u.getEmail().equals(email)) {
+                return Optional.of(u);
+            }
+        }
         return Optional.empty();
     }
 

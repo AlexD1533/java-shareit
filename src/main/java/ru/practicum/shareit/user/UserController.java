@@ -26,11 +26,12 @@ public class UserController {
         return createdUser;
     }
 
-    @PutMapping
-    public UserDto update(@Valid @RequestBody UpdateUserRequest request) {  // Убрать @PathVariable
+    @PatchMapping("/{userId}")
+    public UserDto update(@Valid @RequestBody UpdateUserRequest request,
+                                 @PathVariable Long userId) {
         log.info("Пользователь: запрос на обновление {}", request);
 
-        UserDto updatedUser = userService.updateUser(request.getId(), request);
+        UserDto updatedUser = userService.updateUser(userId, request);
         log.info("Пользователь обновлён {}", updatedUser);
         return updatedUser;
     }
