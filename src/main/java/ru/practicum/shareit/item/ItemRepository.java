@@ -48,6 +48,7 @@ public class ItemRepository implements ItemStorage{
         return items.values().stream()
                 .filter(i -> i.getName().toLowerCase().contains(searchText) ||
                         i.getDescription().toLowerCase().contains(searchText) )
+                .filter(i -> i.getAvailable() == true)
                 .toList();
     }
 

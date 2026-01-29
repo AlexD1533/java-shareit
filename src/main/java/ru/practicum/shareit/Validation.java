@@ -23,7 +23,7 @@ public class Validation {
     }
 
     public void itemExistValidation(Long itemId) {
-        if (itemRepository.validateId(itemId)) {
+        if (!itemRepository.validateId(itemId)) {
             throw new NotFoundException("Вещь с id=" + itemId + " не найдена");
         }
     }
@@ -37,9 +37,5 @@ if (!item.getOwnerId().equals(userId)) {
 }
     }
 
-    public void searchTextValidation(String text) {
-        if (text.isBlank()) {
-            throw new ValidationException("Неправильный формат текста");
-        }
-    }
+
 }

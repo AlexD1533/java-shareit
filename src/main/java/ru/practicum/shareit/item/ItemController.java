@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.user.UserDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class ItemController {
         validation.ownerValidation(itemId, userId);
 
 
-       ItemDto updateItem = itemService.update(itemId, updates);
+        ItemDto updateItem = itemService.update(itemId, updates);
         log.info("Вещь обновлёна {}", updateItem);
 
         return updateItem;
@@ -63,7 +64,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getUserItems(
-    @RequestHeader("X-Sharer-User-Id") Long userId) {
+            @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение всех вещей пользователя)");
         validation.userIdValidation(userId);
         return itemService.getAllByUserId(userId);
@@ -76,11 +77,11 @@ public class ItemController {
             @RequestParam String text) {
         log.info("Вещь: запрос поиск по тексту");
         validation.userIdValidation(userId);
-        validation.searchTextValidation(text);
 
+        if (text.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         return itemService.getByText(text);
-
-        // Поиск вещей по тексту (только доступные)
     }
 }
 
