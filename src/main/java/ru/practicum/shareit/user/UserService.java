@@ -35,11 +35,7 @@ public class UserService {
                 .map(user -> UserMapper.updateUserFields(user, request))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-
-
         updatedUser = userRepository.update(updatedUser);
-
-
 
         return UserMapper.mapToUserDto(updatedUser);
     }
