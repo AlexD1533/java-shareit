@@ -1,13 +1,11 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
 
-
 @Repository
-public class ItemRepository implements ItemStorage{
+public class ItemRepository implements ItemStorage {
 
     private final Map<Long, Item> items = new HashMap<>();
     private Long itemIdCounter = 0L;
@@ -47,7 +45,7 @@ public class ItemRepository implements ItemStorage{
         String searchText = text.toLowerCase();
         return items.values().stream()
                 .filter(i -> i.getName().toLowerCase().contains(searchText) ||
-                        i.getDescription().toLowerCase().contains(searchText) )
+                        i.getDescription().toLowerCase().contains(searchText))
                 .filter(i -> i.getAvailable() == true)
                 .toList();
     }
@@ -56,5 +54,4 @@ public class ItemRepository implements ItemStorage{
     public boolean validateId(long id) {
         return (items.containsKey(id));
     }
-
 }

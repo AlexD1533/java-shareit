@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.item.model.Item;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +11,9 @@ public interface ItemStorage {
 
     Optional<Item> findById(Long id);
 
-    List<Item> findItemsByUserId (Long id);
+    List<Item> findItemsByUserId(Long id);
 
-    List<Item> findByText (String text);
+    List<Item> findByText(String text);
 
     boolean validateId(long id);
 }

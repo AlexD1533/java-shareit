@@ -54,5 +54,4 @@ public class UserRepository implements UserStorage {
         return (users.containsKey(id));
     }
 
-
 }

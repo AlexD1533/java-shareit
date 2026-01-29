@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -8,7 +7,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
-import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
@@ -26,8 +24,8 @@ public class ItemService {
     }
 
     public ItemDto update(Long itemId, UpdateItemRequest request) {
-Item item = itemRepository.findById(itemId).orElseThrow(() ->
-        new NotFoundException("Вещи с id: " + itemId + " не существует"));
+        Item item = itemRepository.findById(itemId).orElseThrow(() ->
+                new NotFoundException("Вещи с id: " + itemId + " не существует"));
 
         Item updateItem = ItemMapper.updateItemFields(item, request);
         return ItemMapper.mapToItemDto(updateItem);

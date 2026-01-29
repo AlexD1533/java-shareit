@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Validation;
+import ru.practicum.shareit.validation.Validation;
+import ru.practicum.shareit.user.dto.NewUserRequest;
+import ru.practicum.shareit.user.dto.UpdateUserRequest;
+import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.Collection;
 
@@ -57,6 +60,7 @@ public class UserController {
         log.info("Найден пользователь: {}", user);
         return user;
     }
+
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         // Удаление пользователя, возврат 204 No Content

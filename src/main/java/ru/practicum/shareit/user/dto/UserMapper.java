@@ -1,8 +1,8 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
+import ru.practicum.shareit.user.User;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UserMapper {
@@ -10,7 +10,6 @@ public final class UserMapper {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setName(request.getName());
-
 
         return user;
     }

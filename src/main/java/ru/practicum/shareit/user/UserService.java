@@ -2,11 +2,13 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.NewUserRequest;
+import ru.practicum.shareit.user.dto.UpdateUserRequest;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserMapper;
 
 import java.util.*;
-
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +16,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto create(NewUserRequest request) {
-
 
         User user = UserMapper.mapToUser(request);
         user = userRepository.create(user);

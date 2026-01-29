@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -6,8 +6,7 @@ import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.UserRepository;
 
 @Component
@@ -30,20 +29,18 @@ public class Validation {
         }
     }
 
-    public void ownerValidation (Long itemId, Long userId) {
+    public void ownerValidation(Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещь с id=" + itemId + " не найдена"));
 
-if (!item.getOwnerId().equals(userId)) {
-    throw new ValidationException("Пользователь c id " + userId + "не является хозяином вещи с id " + itemId);
-}
+        if (!item.getOwnerId().equals(userId)) {
+            throw new ValidationException("Пользователь c id " + userId + "не является хозяином вещи с id " + itemId);
+        }
     }
 
-    public void userEmailValidation (String email) {
+    public void userEmailValidation(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicatedDataException("Email " + email + " уже используется");
         }
-
     }
-
 }

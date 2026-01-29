@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Validation;
+import ru.practicum.shareit.validation.Validation;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
@@ -51,8 +51,6 @@ public class ItemController {
         log.info("Вещь обновлёна {}", updateItem);
 
         return updateItem;
-
-
     }
 
     @GetMapping("/{itemId}")
@@ -68,7 +66,6 @@ public class ItemController {
         log.info("Вещь: запрос на получение всех вещей пользователя)");
         validation.userIdValidation(userId);
         return itemService.getAllByUserId(userId);
-
     }
 
     @GetMapping("/search")
