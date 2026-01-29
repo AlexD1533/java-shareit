@@ -26,8 +26,8 @@ public class ItemService {
     public ItemDto update(Long itemId, UpdateItemRequest request) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
-
         Item updateItem = ItemMapper.updateItemFields(item, request);
+        itemRepository.update(updateItem);
         return ItemMapper.mapToItemDto(updateItem);
 
     }
