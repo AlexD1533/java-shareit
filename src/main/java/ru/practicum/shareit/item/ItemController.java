@@ -8,7 +8,7 @@ import ru.practicum.shareit.Validation;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
-import ru.practicum.shareit.user.UserDto;
+
 
 import java.util.ArrayList;
 import java.util.List;

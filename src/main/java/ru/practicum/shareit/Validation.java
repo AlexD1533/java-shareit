@@ -2,10 +2,12 @@ package ru.practicum.shareit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 @Component
@@ -37,5 +39,11 @@ if (!item.getOwnerId().equals(userId)) {
 }
     }
 
+    public void userEmailValidation (String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new DuplicatedDataException("Email " + email + " уже используется");
+        }
+
+    }
 
 }

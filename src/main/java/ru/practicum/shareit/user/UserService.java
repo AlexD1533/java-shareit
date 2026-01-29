@@ -14,10 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto create(NewUserRequest request) {
-        Optional<User> alreadyExistUser = userRepository.findByEmail(request.getEmail());
-        if (alreadyExistUser.isPresent()) {
-            throw new DuplicatedDataException("Данный имейл уже используется");
-        }
+
 
         User user = UserMapper.mapToUser(request);
         user = userRepository.create(user);
@@ -25,11 +22,6 @@ public class UserService {
     }
 
     public UserDto updateUser(long userId, UpdateUserRequest request) {
-
-        Optional<User> alreadyExistUser = userRepository.findByEmail(request.getEmail());
-        if (alreadyExistUser.isPresent()) {
-            throw new DuplicatedDataException("Данный имейл уже используется");
-        }
 
         User updatedUser = userRepository.getById(userId)
                 .map(user -> UserMapper.updateUserFields(user, request))
