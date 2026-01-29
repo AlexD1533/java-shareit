@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ItemStorage {
 
-    Item create(Item Item);
+    Item create(Item item);
 
     Item update(Item item);
 
