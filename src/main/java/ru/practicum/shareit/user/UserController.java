@@ -19,7 +19,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final Validation validation;
 
     @PostMapping
@@ -28,7 +28,7 @@ public class UserController {
         log.info("Пользователь: запрос на создание {}", request);
         validation.userEmailValidation(request.getEmail());
 
-        UserDto createdUser = userService.create(request);
+        UserDto createdUser = userServiceImpl.create(request);
         log.info("Пользователь создан с id={}", createdUser.getId());
         return createdUser;
     }
@@ -39,7 +39,7 @@ public class UserController {
         log.info("Пользователь: запрос на обновление {}", request);
         validation.userEmailValidation(request.getEmail());
 
-        UserDto updatedUser = userService.updateUser(userId, request);
+        UserDto updatedUser = userServiceImpl.updateUser(userId, request);
         log.info("Пользователь обновлён {}", updatedUser);
         return updatedUser;
     }
@@ -48,7 +48,7 @@ public class UserController {
     public Collection<UserDto> getAll() {
 
         log.info("Пользователь: запрос на получение всех пользователей)");
-        return userService.getAll();
+        return userServiceImpl.getAll();
     }
 
     @GetMapping("/{id}")
@@ -56,13 +56,17 @@ public class UserController {
         log.info("Пользователь: запрос на получение по id={}", id);
         validation.userIdValidation(id);
 
-        UserDto user = userService.getById(id);
+        UserDto user = userServiceImpl.getById(id);
         log.info("Найден пользователь: {}", user);
         return user;
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
-        // Удаление пользователя, возврат 204 No Content
+        log.info("Пользователь: запрос на удаление {}" , userId);
+        userServiceImpl.delete(userId);
+        log.info("Пользователь {} удален", userId);
+
     }
 }

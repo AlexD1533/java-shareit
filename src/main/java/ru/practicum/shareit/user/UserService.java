@@ -10,41 +10,15 @@ import ru.practicum.shareit.user.dto.UserMapper;
 
 import java.util.*;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
-    private final UserRepository userRepository;
+public interface UserService {
 
-    public UserDto create(NewUserRequest request) {
+    UserDto create(NewUserRequest request);
 
-        User user = UserMapper.mapToUser(request);
-        user = userRepository.create(user);
-        return UserMapper.mapToUserDto(user);
-    }
+    UserDto updateUser(long userId, UpdateUserRequest request);
 
-    public UserDto updateUser(long userId, UpdateUserRequest request) {
+    Collection<UserDto> getAll();
 
-        User updatedUser = userRepository.getById(userId)
-                .map(user -> UserMapper.updateUserFields(user, request))
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+    UserDto getById(long id);
 
-        updatedUser = userRepository.update(updatedUser);
-
-        return UserMapper.mapToUserDto(updatedUser);
-    }
-
-    public Collection<UserDto> getAll() {
-        return userRepository.getAll().stream()
-                .map(UserMapper::mapToUserDto)
-                .toList();
-    }
-
-    public UserDto getById(long id) {
-
-        User user = userRepository.getById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + id));
-        return UserMapper.mapToUserDto(user);
-    }
-
-
+    void delete(Long id);
 }

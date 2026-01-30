@@ -54,4 +54,7 @@ public class UserRepository implements UserStorage {
         return (users.containsKey(id));
     }
 
+    public void deleteById(Long id) {
+        users.remove(id);
+    }
 }
