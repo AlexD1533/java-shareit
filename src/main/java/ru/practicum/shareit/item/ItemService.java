@@ -10,49 +10,16 @@ import ru.practicum.shareit.item.dto.UpdateItemRequest;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class ItemService {
-    private final ItemRepository itemRepository;
-    private final ItemMapper itemMapper;
 
-    public ItemDto create(Long userId, NewItemRequest request) {
+public interface ItemService {
 
-        Item newItem = ItemMapper.mapToItem(request, userId);
-        return ItemMapper.mapToItemDto(itemRepository.create(newItem));
+    ItemDto create(Long userId, NewItemRequest request);
 
-    }
+    ItemDto update(Long itemId, UpdateItemRequest request);
 
-    public ItemDto update(Long itemId, UpdateItemRequest request) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() ->
-                new NotFoundException("Вещи с id: " + itemId + " не существует"));
-        Item updateItem = ItemMapper.updateItemFields(item, request);
-        itemRepository.update(updateItem);
-        return ItemMapper.mapToItemDto(updateItem);
+    ItemDto getById(Long itemId);
 
-    }
+    List<ItemDto> getAllByUserId(Long userId);
 
-    public ItemDto getById(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() ->
-                new NotFoundException("Вещи с id: " + itemId + " не существует"));
-        return ItemMapper.mapToItemDto(item);
-
-    }
-
-    public List<ItemDto> getAllByUserId(Long userId) {
-
-
-        List<Item> itemsList = itemRepository.findItemsByUserId(userId);
-        return itemsList.stream()
-                .map(ItemMapper::mapToItemDto)
-                .toList();
-
-    }
-
-    public List<ItemDto> getByText(String text) {
-        List<Item> itemsList = itemRepository.findByText(text);
-        return itemsList.stream()
-                .map(ItemMapper::mapToItemDto)
-                .toList();
-    }
+    List<ItemDto> getByText(String text);
 }

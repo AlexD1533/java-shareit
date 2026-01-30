@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemController {
 
     private final Validation validation;
-    private final ItemService itemService;
+    private final ItemServiceImpl itemServiceImpl;
 
     @PostMapping
     public ItemDto createItem(
@@ -28,7 +28,7 @@ public class ItemController {
             @Valid @RequestBody NewItemRequest request) {
         log.info("Вещь: запрос на создание {}", request);
         validation.userIdValidation(userId);
-        ItemDto createItem = itemService.create(userId, request);
+        ItemDto createItem = itemServiceImpl.create(userId, request);
         log.info("Вещь создана с id={}", createItem.getId());
         return createItem;
 
@@ -47,7 +47,7 @@ public class ItemController {
         validation.ownerValidation(itemId, userId);
 
 
-        ItemDto updateItem = itemService.update(itemId, updates);
+        ItemDto updateItem = itemServiceImpl.update(itemId, updates);
         log.info("Вещь обновлёна {}", updateItem);
 
         return updateItem;
@@ -57,7 +57,7 @@ public class ItemController {
     public ItemDto getItem(@PathVariable Long itemId) {
         log.info("Вещь: запрос на получение по id={}", itemId);
         validation.itemExistValidation(itemId);
-        return itemService.getById(itemId);
+        return itemServiceImpl.getById(itemId);
     }
 
     @GetMapping
@@ -65,7 +65,7 @@ public class ItemController {
             @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение всех вещей пользователя)");
         validation.userIdValidation(userId);
-        return itemService.getAllByUserId(userId);
+        return itemServiceImpl.getAllByUserId(userId);
     }
 
     @GetMapping("/search")
@@ -78,7 +78,7 @@ public class ItemController {
         if (text.isEmpty()) {
             return new ArrayList<>(0);
         }
-        return itemService.getByText(text);
+        return itemServiceImpl.getByText(text);
     }
 }
 
