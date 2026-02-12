@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    description VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
     available BOOLEAN,
     owner_id INTEGER NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users (user_id) ON DELETE RESTRICT

@@ -13,13 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
-    private final ItemRepository itemRepository;
+    private final ItemJpaRepository itemRepository;
 
     @Override
     public ItemDto create(Long userId, NewItemRequest request) {
 
         Item newItem = ItemMapper.mapToItem(request, userId);
-        return ItemMapper.mapToItemDto(itemRepository.create(newItem));
+        return ItemMapper.mapToItemDto(itemRepository.save(newItem));
 
     }
 
@@ -28,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
         Item updateItem = ItemMapper.updateItemFields(item, request);
-        itemRepository.update(updateItem);
+        itemRepository.save(updateItem);
         return ItemMapper.mapToItemDto(updateItem);
 
     }
@@ -44,8 +44,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAllByUserId(Long userId) {
 
-
-        List<Item> itemsList = itemRepository.findItemsByUserId(userId);
+        List<Item> itemsList = itemRepository.findAllByOwnerId(userId);
         return itemsList.stream()
                 .map(ItemMapper::mapToItemDto)
                 .toList();
@@ -54,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getByText(String text) {
-        List<Item> itemsList = itemRepository.findByText(text);
+        List<Item> itemsList = itemRepository.findAllByText(text);
         return itemsList.stream()
                 .map(ItemMapper::mapToItemDto)
                 .toList();

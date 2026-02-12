@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.UserJpaRepository;
 
@@ -14,7 +14,7 @@ import ru.practicum.shareit.user.UserJpaRepository;
 public class Validation {
 
     private final UserJpaRepository userRepository;
-    private final ItemRepository itemRepository;
+    private final ItemJpaRepository itemRepository;
 
     public void userIdValidation(Long userId) {
 
@@ -24,7 +24,7 @@ public class Validation {
     }
 
     public void itemExistValidation(Long itemId) {
-        if (!itemRepository.validateId(itemId)) {
+        if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("Вещь с id=" + itemId + " не найдена");
         }
     }
