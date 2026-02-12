@@ -7,18 +7,18 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.UserJpaRepository;
 
 @Component
 @RequiredArgsConstructor
 public class Validation {
 
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
     private final ItemRepository itemRepository;
 
     public void userIdValidation(Long userId) {
 
-        if (!userRepository.validateId(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с id=" + userId + " не найден");
         }
     }

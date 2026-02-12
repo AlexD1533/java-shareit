@@ -1,0 +1,21 @@
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    item_id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(255) NOT NULL UNIQUE,
+    available BOOLEAN,
+    owner_id INTEGER NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users (user_id) ON DELETE RESTRICT
+
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    comment_id SERIAL PRIMARY KEY,
+    content VARCHAR(255) NOT NULL UNIQUE
+);
