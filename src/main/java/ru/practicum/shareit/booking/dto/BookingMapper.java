@@ -21,18 +21,16 @@ public final class BookingMapper {
 
     public static BookingDto mapToBookingDto(Booking booking) {
         BookingDto dto = new BookingDto();
-        dto.setBookingId(booking.getBookingId());
+        dto.setId(booking.getBookingId());
         dto.setStart(booking.getStartDate());
         dto.setEnd(booking.getEndDate());
         dto.setStatus(booking.getStatus());
 
-        // Информация о бронирующем пользователе
         User bookerInfo = new User();
         bookerInfo.setId(booking.getBooker().getId());
         bookerInfo.setName(booking.getBooker().getName());
         dto.setBooker(bookerInfo);
 
-        // Информация о вещи
         Item itemInfo = new Item();
         itemInfo.setId(booking.getItem().getId());
         itemInfo.setName(booking.getItem().getName());

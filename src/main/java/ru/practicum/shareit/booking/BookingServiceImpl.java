@@ -15,7 +15,7 @@ import ru.practicum.shareit.user.UserJpaRepository;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository  bookingRepository;
+    private final BookingRepository bookingRepository;
     private final UserJpaRepository userRepository;
     private final ItemJpaRepository itemRepository;
 
@@ -31,4 +31,19 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.mapToBookingDto(bookingRepository.save(newBooking));
 
     }
+
+    @Override
+    public BookingDto confirmationBooking(Long bookingId, Boolean approved) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new NotFoundException("Бронирование с id=" + bookingId + " не найдено"));
+
+        if (approved) {
+            booking.setStatus(Status.APPROVED);
+        } else {
+            booking.setStatus(Status.REJECTED);
+        }
+        return BookingMapper.mapToBookingDto(bookingRepository.save(booking));
+
+    }
+
 }

@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.dto.BookingRequest;
 import ru.practicum.shareit.item.ItemServiceImpl;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
+import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.validation.Validation;
 
 @Slf4j
@@ -31,12 +32,26 @@ public class BookingController {
         validation.itemExistValidation(request.getItemId());
         validation.itemStatusValidation(request.getItemId());
         BookingDto createBooking = bookingServiceImpl.create(userId, request);
-        log.info("Бронирование создано с id={}", createBooking.getBookingId());
+        log.info("Бронирование создано с id={}", createBooking.getId());
         return createBooking;
 
     }
 
 
+    @PatchMapping("/{bookingId}")
+    public BookingDto confirmationBooking(
+            @PathVariable long bookingId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam Boolean approved) {
 
+        log.info("Бронирование: запрос на подтверждение бронирования");
+
+        validation.ownerItemByBookingValidation(bookingId, userId);
+
+        BookingDto updateBooking = bookingServiceImpl.confirmationBooking(bookingId, approved);
+        log.info("Вещь обновлёна");
+        return updateBooking;
+
+    }
 
 }

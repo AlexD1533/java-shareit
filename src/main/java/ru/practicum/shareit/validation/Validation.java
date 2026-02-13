@@ -3,6 +3,8 @@ package ru.practicum.shareit.validation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -10,12 +12,15 @@ import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.UserJpaRepository;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class Validation {
 
     private final UserJpaRepository userRepository;
     private final ItemJpaRepository itemRepository;
+    private final BookingRepository bookingRepository;
 
     public void userIdValidation(Long userId) {
 
@@ -51,6 +56,28 @@ public class Validation {
                    new NotFoundException("Вещь с id=" + itemId + " не найдена"));
            if (!item.getAvailable()) {
             throw new ValidationException("Вещь с id=" + itemId + " не доступна для аренды");
+        }
+    }
+
+    public void bookingValidation(Long bookingId) {
+
+        if (!bookingRepository.existsById(bookingId)) {
+            throw new NotFoundException("Бронирование с id=" + bookingId + " не найдено");
+        }
+
+    }
+
+    public void ownerItemByBookingValidation(Long bookingId, Long userId) {
+
+        if (!userRepository.existsById(userId)) {
+            throw new ValidationException("Пользователь с id=" + userId + " не найден");
+        }
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new ValidationException("Бронирование с id=" + bookingId + " не найдено"));
+
+        if (!Objects.equals(booking.getItem().getOwnerId(), userId)) {
+            throw new ValidationException("Пользователь с id=" + userId + " не является владельцем вещи из бронирования");
         }
     }
 }
