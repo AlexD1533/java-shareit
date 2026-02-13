@@ -1,12 +1,42 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingRequest;
+import ru.practicum.shareit.item.ItemServiceImpl;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.NewItemRequest;
+import ru.practicum.shareit.validation.Validation;
 
-/**
- * TODO Sprint add-bookings.
- */
+@Slf4j
+
 @RestController
 @RequestMapping(path = "/bookings")
+@RequiredArgsConstructor
 public class BookingController {
+
+    private final Validation validation;
+    private final BookingServiceImpl bookingServiceImpl;
+
+
+    @PostMapping
+    public BookingDto createBooking(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @Valid @RequestBody BookingRequest request) {
+        log.info("Бронирование: запрос на создание {}", request);
+        validation.userIdValidation(userId);
+        validation.itemExistValidation(request.getItemId());
+        validation.itemStatusValidation(request.getItemId());
+        BookingDto createBooking = bookingServiceImpl.create(userId, request);
+        log.info("Бронирование создано с id={}", createBooking.getBookingId());
+        return createBooking;
+
+    }
+
+
+
+
 }

@@ -26,6 +26,15 @@ public final class ItemMapper {
         return dto;
     }
 
+
+    public static ItemSmallDto mapToItemSmallDto(Item item) {
+        ItemSmallDto dto = new ItemSmallDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+
+        return dto;
+    }
+
     public static Item updateItemFields(Item item, UpdateItemRequest request) {
         if (request.getName() != null && !request.getName().isBlank()) {
             item.setName(request.getName());
