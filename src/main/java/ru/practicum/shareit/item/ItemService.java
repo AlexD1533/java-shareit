@@ -1,10 +1,13 @@
 package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoWithDates;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ItemService {
@@ -15,7 +18,8 @@ public interface ItemService {
 
     ItemDto getById(Long itemId);
 
-    List<ItemDto> getAllByUserId(Long userId);
+    List<ItemDtoWithDates> getAllByUserId(Long userId);
 
     List<ItemDto> getByText(String text);
+
 }

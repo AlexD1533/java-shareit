@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemDtoWithDates;
 import ru.practicum.shareit.validation.Validation;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
@@ -61,7 +62,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getUserItems(
+    public List<ItemDtoWithDates> getUserItems(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение всех вещей пользователя)");
         validation.userIdValidation(userId);

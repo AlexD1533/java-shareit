@@ -4,7 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -103,4 +108,20 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
 
 
+
+    @Query("SELECT b.startDate FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.id = :itemId " +
+            "AND b.startDate < CURRENT_TIMESTAMP " +
+            "AND b.status = 'APPROVED' " +
+            "ORDER BY b.startDate DESC")
+    List<LocalDateTime> findLastDateBookingByItemId(@Param("itemId") Long itemId, Pageable pageable);
+
+    @Query("SELECT b.startDate FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.id = :itemId " +
+            "AND b.status = 'APPROVED' " +
+            "AND b.startDate >= CURRENT_TIMESTAMP " +
+            "ORDER BY b.startDate ASC")
+    List<LocalDateTime> findNextDateBookingByItemId(@Param("itemId") Long itemId, Pageable pageable);
 }

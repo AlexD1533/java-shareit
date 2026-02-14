@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -11,8 +12,10 @@ import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserJpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -115,4 +118,22 @@ public class BookingServiceImpl implements BookingService {
         }
         return BookingMapper.mapToBookingDtoToList(result);
     }
+
+    @Override
+    public Optional<LocalDateTime> getLastDateBooking(Long itemId) {
+        return bookingRepository.findLastDateBookingByItemId(
+                        itemId, PageRequest.of(0, 1))
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<LocalDateTime> getNextDateBooking(Long itemId) {
+        return bookingRepository.findNextDateBookingByItemId(
+                        itemId, PageRequest.of(0, 1))
+                .stream()
+                .findFirst();
+    }
+
+
 }

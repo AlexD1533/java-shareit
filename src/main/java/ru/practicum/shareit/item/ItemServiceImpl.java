@@ -1,25 +1,32 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
 
+import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.exception.NotFoundException;
+
+import ru.practicum.shareit.item.dto.*;
+
+import org.springframework.data.domain.PageRequest;
+
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemJpaRepository itemRepository;
+    private final ItemMapper itemMapper;
+    private final BookingRepository bookingRepository;
 
     @Override
     public ItemDto create(Long userId, NewItemRequest request) {
 
         Item newItem = ItemMapper.mapToItem(request, userId);
-        return ItemMapper.mapToItemDto(itemRepository.save(newItem));
+        return itemMapper.mapToItemDto(itemRepository.save(newItem));
 
     }
 
@@ -29,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
         Item updateItem = ItemMapper.updateItemFields(item, request);
         itemRepository.save(updateItem);
-        return ItemMapper.mapToItemDto(updateItem);
+        return itemMapper.mapToItemDto(updateItem);
 
     }
 
@@ -37,16 +44,16 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto getById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
-        return ItemMapper.mapToItemDto(item);
+        return itemMapper.mapToItemDto(item);
 
     }
 
     @Override
-    public List<ItemDto> getAllByUserId(Long userId) {
+    public List<ItemDtoWithDates> getAllByUserId(Long userId) {
 
         List<Item> itemsList = itemRepository.findAllByOwnerId(userId);
         return itemsList.stream()
-                .map(ItemMapper::mapToItemDto)
+                .map(itemMapper::mapToItemDtoWithDates)
                 .toList();
 
     }
@@ -55,7 +62,11 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getByText(String text) {
         List<Item> itemsList = itemRepository.findAllByText(text);
         return itemsList.stream()
-                .map(ItemMapper::mapToItemDto)
+                .map(itemMapper::mapToItemDto)
                 .toList();
     }
+
+
+
+
 }
