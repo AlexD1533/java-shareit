@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.InternalServerException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -23,7 +24,9 @@ public class Validation {
 
     private final UserJpaRepository userRepository;
     private final ItemJpaRepository itemRepository;
-    private final BookingRepository bookingRepository;
+    private final BookingRepository
+
+            bookingRepository;
 
     public void userIdValidation(Long userId) {
 
@@ -109,6 +112,20 @@ public class Validation {
     public void userIdForGetBookingsValidation(Long ownerId) {
         if (!userRepository.existsById(ownerId)) {
             throw new InternalServerException("Пользователь с id=" + ownerId + " не найден");
+        }
+    }
+
+    public void userFromCommentValidation(Long userId, Long itemId) {
+        userIdValidation(userId);
+        List<Booking> bookings = bookingRepository.findAllByUserIdApproved(userId);
+
+        List<Booking> result = bookings.stream()
+                //.filter(b -> b.getStatus() == Status.APPROVED)
+                .filter(b -> Objects.equals(b.getItem().getId(), itemId))
+
+                .toList();
+        if (result.isEmpty()) {
+            throw new ValidationException("Пользователь с id=" + userId + " не брал в аренду вещь с id=" + itemId);
         }
     }
 }

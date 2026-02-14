@@ -1,9 +1,6 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithDates;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,4 +19,5 @@ public interface ItemService {
 
     List<ItemDto> getByText(String text);
 
+    CommentDto createComment(Long userId, Long itemId, NewCommentRequest request);
 }

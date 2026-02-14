@@ -60,6 +60,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByUserId(@Param("userId") Long userId);
 
 
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.booker u " +
+            "WHERE u.id = :userId " +
+            "AND b.status = ru.practicum.shareit.booking.Status.APPROVED " +
+            "AND b.startDate < CURRENT_TIMESTAMP " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByUserIdApproved(@Param("userId") Long userId);
+
 
     @Query("SELECT b FROM Booking b " +
             "JOIN b.item i " +
@@ -105,6 +113,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE i.ownerId = :ownerId " +
             "ORDER BY b.startDate DESC")
     List<Booking> findAllByOwnerId(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "AND b.status = 'APPROVED' " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdApproved(@Param("ownerId") Long ownerId);
+
+
 
 
 

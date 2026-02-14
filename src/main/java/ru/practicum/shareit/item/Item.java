@@ -3,6 +3,8 @@ package ru.practicum.shareit.item;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "items")
@@ -16,5 +18,8 @@ public class Item {
     private Boolean available;
 
     private Long ownerId;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    List<Comment> comments;
 
 }

@@ -4,11 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDtoWithDates;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.validation.Validation;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
 
 
 import java.util.ArrayList;
@@ -81,5 +78,24 @@ public class ItemController {
         }
         return itemServiceImpl.getByText(text);
     }
+
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto createItem(
+            @PathVariable Long itemId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @Valid @RequestBody NewCommentRequest request) {
+        log.info("Комментарий: запрос на создание {}", request);
+
+        validation.userFromCommentValidation(userId, itemId);
+        CommentDto comment = itemServiceImpl.createComment(userId, itemId, request);
+        log.info("Комментарий создан с id={}", comment.getId());
+        return comment;
+
+    }
+
+
+
+
 }
 

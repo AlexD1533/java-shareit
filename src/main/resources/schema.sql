@@ -33,5 +33,11 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 CREATE TABLE IF NOT EXISTS comments (
     comment_id SERIAL PRIMARY KEY,
-    content VARCHAR(255) NOT NULL UNIQUE
+    content VARCHAR(255) NOT NULL UNIQUE,
+    item_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    create_date TIMESTAMP WITHOUT TIME ZONE,
+
+    FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE RESTRICT,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT
 );

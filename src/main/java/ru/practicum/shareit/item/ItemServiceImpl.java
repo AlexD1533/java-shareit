@@ -3,24 +3,24 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 
 import ru.practicum.shareit.item.dto.*;
 
-import org.springframework.data.domain.PageRequest;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserJpaRepository;
 
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemJpaRepository itemRepository;
     private final ItemMapper itemMapper;
-    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
+    private final UserJpaRepository userRepository;
 
     @Override
     public ItemDto create(Long userId, NewItemRequest request) {
@@ -66,7 +66,16 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
     }
 
+@Override
+public CommentDto createComment(Long userId, Long itemId, NewCommentRequest request) {
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
 
+        Item item = itemRepository.findById(itemId).orElseThrow(() ->
+                new NotFoundException("Вещи с id: " + itemId + " не существует"));
 
+        Comment comment = commentMapper.mapToComment(user, item, request);
+        return commentMapper.mapToCommentDto(commentRepository.save(comment));
+    }
 }
