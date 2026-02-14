@@ -12,6 +12,8 @@ import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.validation.Validation;
 
+import java.util.List;
+
 @Slf4j
 
 @RestController
@@ -45,13 +47,31 @@ public class BookingController {
             @RequestParam Boolean approved) {
 
         log.info("Бронирование: запрос на подтверждение бронирования");
-
         validation.ownerItemByBookingValidation(bookingId, userId);
-
         BookingDto updateBooking = bookingServiceImpl.confirmationBooking(bookingId, approved);
         log.info("Вещь обновлёна");
         return updateBooking;
-
     }
 
-}
+    @GetMapping("/{bookingId}")
+    public BookingDto getBookingInfo(@PathVariable Long bookingId,
+                                     @RequestHeader("X-Sharer-User-Id") Long userId) {
+
+        validation.bookingValidation(bookingId);
+        validation.creatorOrOwnerBookingValidation(bookingId, userId);
+
+        log.info("Бронирование: запрос на получение информации по id={}", bookingId);
+        return bookingServiceImpl.getBookingInfo(bookingId);
+    }
+
+
+    @GetMapping()
+    public List<BookingDto> getAllBookings(
+                                           @RequestHeader("X-Sharer-User-Id") Long userId,
+                                           @RequestParam (defaultValue = "ALL") States state) {
+
+        validation.userIdValidation(userId);
+        return bookingServiceImpl.getAllBookingsByUserAndStates(userId, state);
+
+    }
+    }

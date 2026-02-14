@@ -6,6 +6,8 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.user.User;
 
+import java.util.List;
+
 public final class BookingMapper {
 
     public static Booking mapToBooking(BookingRequest request, User booker, Item item) {
@@ -50,5 +52,11 @@ public final class BookingMapper {
             booking.setStatus(request.getStatus());
         }
         return booking;
+    }
+
+    public static List<BookingDto> mapToBookingDtoToList(List<Booking> all) {
+        return all.stream()
+                .map(BookingMapper::mapToBookingDto)
+                .toList();
     }
 }

@@ -11,6 +11,9 @@ import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserJpaRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
@@ -43,6 +46,44 @@ public class BookingServiceImpl implements BookingService {
             booking.setStatus(Status.REJECTED);
         }
         return BookingMapper.mapToBookingDto(bookingRepository.save(booking));
+
+    }
+
+    @Override
+    public BookingDto getBookingInfo(Long bookingId) {
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new NotFoundException("Бронирование с id=" + bookingId + " не найдено"));
+        return BookingMapper.mapToBookingDto(bookingRepository.save(booking));
+
+
+    }
+
+    @Override
+    public List<BookingDto> getAllBookingsByUserAndStates(Long userId, States state) {
+        List<Booking> result = new ArrayList<>();
+
+        switch (state) {
+            case CURRENT:
+                result = bookingRepository.findAllByUserIdAndStateCurrent(userId);
+                break;
+            case PAST:
+                result = bookingRepository.findAllByUserIdAndStatePast(userId);
+                break;
+            case FUTURE:
+                result = bookingRepository.findAllByUserIdAndStateFuture(userId);
+                break;
+            case WAITING:
+                result =bookingRepository.findAllByUserIdAndStateWaiting(userId);
+                break;
+            case REJECTED:
+                result =bookingRepository.findAllByUserIdAndStateRejected(userId);
+                break;
+            case ALL:
+                result =bookingRepository.findAllByUserId(userId);
+
+        }
+        return BookingMapper.mapToBookingDtoToList(result);
 
     }
 

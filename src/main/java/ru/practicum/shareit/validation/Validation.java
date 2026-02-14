@@ -52,9 +52,9 @@ public class Validation {
 
     public void itemStatusValidation(@NotNull(message = "ID предмета не может быть пустым") Long itemId) {
 
-           Item item = itemRepository.findById(itemId).orElseThrow(() ->
-                   new NotFoundException("Вещь с id=" + itemId + " не найдена"));
-           if (!item.getAvailable()) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() ->
+                new NotFoundException("Вещь с id=" + itemId + " не найдена"));
+        if (!item.getAvailable()) {
             throw new ValidationException("Вещь с id=" + itemId + " не доступна для аренды");
         }
     }
@@ -79,5 +79,19 @@ public class Validation {
         if (!Objects.equals(booking.getItem().getOwnerId(), userId)) {
             throw new ValidationException("Пользователь с id=" + userId + " не является владельцем вещи из бронирования");
         }
+    }
+
+    public void creatorOrOwnerBookingValidation(Long bookingId, Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ValidationException("Пользователь с id=" + userId + " не найден");
+        }
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new ValidationException("Бронирование с id=" + bookingId + " не найдено"));
+
+        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
+            throw new ValidationException("Пользователь с id=" + userId + " не является владельцем бронирования или владельцем вещи");
+        }
+
     }
 }
