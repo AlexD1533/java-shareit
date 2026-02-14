@@ -52,7 +52,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@PathVariable Long itemId) {
+    public ItemDtoWithDates getItem(@PathVariable Long itemId) {
         log.info("Вещь: запрос на получение по id={}", itemId);
         validation.itemExistValidation(itemId);
         return itemServiceImpl.getById(itemId);
@@ -86,15 +86,13 @@ public class ItemController {
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @Valid @RequestBody NewCommentRequest request) {
         log.info("Комментарий: запрос на создание {}", request);
-
+        validation.itemExistValidation(itemId);
         validation.userFromCommentValidation(userId, itemId);
         CommentDto comment = itemServiceImpl.createComment(userId, itemId, request);
         log.info("Комментарий создан с id={}", comment.getId());
         return comment;
 
     }
-
-
 
 
 }

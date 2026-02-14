@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import ru.practicum.shareit.booking.BookingServiceImpl;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.user.User;
 
 
 import java.time.LocalDateTime;
@@ -17,13 +17,14 @@ import java.util.List;
 public class ItemMapper {
 
     private final BookingServiceImpl bookingService;
+    private final CommentMapper commentMapper;
 
-    public static Item mapToItem(NewItemRequest request, Long ownerId) {
+    public static Item mapToItem(NewItemRequest request, User owner) {
         Item item = new Item();
         item.setName(request.getName());
         item.setDescription(request.getDescription());
         item.setAvailable(request.getAvailable());
-        item.setOwnerId(ownerId);
+        item.setOwner(owner);
 
         return item;
     }
@@ -34,7 +35,23 @@ public class ItemMapper {
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
         dto.setAvailable(item.getAvailable());
-        dto.setOwnerId(item.getOwnerId());
+        dto.setOwnerId(item.getOwner().getId());
+
+
+        return dto;
+    }
+
+
+    public ItemDtoWithComments mapToItemDtoWithComments(Item item) {
+        ItemDtoWithComments dto = new ItemDtoWithComments();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
+        dto.setOwnerId(item.getOwner().getId());
+
+        List<CommentDto> comments = commentMapper.mapToCommentDto(item.getComments());
+        dto.setComments(comments);
 
         return dto;
     }
@@ -46,15 +63,15 @@ public class ItemMapper {
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
         dto.setAvailable(item.getAvailable());
-        dto.setOwnerId(item.getOwnerId());
+        dto.setOwnerId(item.getOwner().getId());
 
         LocalDateTime lastDate = bookingService.getLastDateBooking(item.getId()).orElse(null);
-
         LocalDateTime nextDate = bookingService.getNextDateBooking(item.getId()).orElse(null);
 
-
-        dto.setLastDateBooking(lastDate);
-        dto.setNextDateBooking(nextDate);
+        List<CommentDto> comments = commentMapper.mapToCommentDto(item.getComments());
+        dto.setComments(comments);
+        dto.setLastBooking(lastDate);
+        dto.setNextBooking(nextDate);
         return dto;
     }
 

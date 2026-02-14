@@ -81,10 +81,8 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
             @RequestParam(defaultValue = "ALL") States state) {
 
-
         validation.userIdForGetBookingsValidation(ownerId);
         validation.ownerExistValidation(ownerId);
-
         return bookingServiceImpl.getAllBookingsByOwnerItemsAndStates(ownerId, state);
     }
 

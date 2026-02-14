@@ -3,6 +3,7 @@ package ru.practicum.shareit.validation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ServerErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -20,13 +21,12 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+
 public class Validation {
 
     private final UserJpaRepository userRepository;
     private final ItemJpaRepository itemRepository;
-    private final BookingRepository
-
-            bookingRepository;
+    private final BookingRepository bookingRepository;
 
     public void userIdValidation(Long userId) {
 
@@ -45,7 +45,7 @@ public class Validation {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещь с id=" + itemId + " не найдена"));
 
-        if (!item.getOwnerId().equals(userId)) {
+        if (!item.getOwner().getId().equals(userId)) {
             throw new ValidationException("Пользователь c id " + userId + "не является хозяином вещи с id " + itemId);
         }
     }
@@ -82,7 +82,7 @@ public class Validation {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new ValidationException("Бронирование с id=" + bookingId + " не найдено"));
 
-        if (!Objects.equals(booking.getItem().getOwnerId(), userId)) {
+        if (!Objects.equals(booking.getItem().getOwner().getId(), userId)) {
             throw new ValidationException("Пользователь с id=" + userId + " не является владельцем вещи из бронирования");
         }
     }
@@ -95,7 +95,7 @@ public class Validation {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new ValidationException("Бронирование с id=" + bookingId + " не найдено"));
 
-        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
+        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {
             throw new ValidationException("Пользователь с id=" + userId + " не является владельцем бронирования или владельцем вещи");
         }
 
@@ -117,15 +117,13 @@ public class Validation {
 
     public void userFromCommentValidation(Long userId, Long itemId) {
         userIdValidation(userId);
-        List<Booking> bookings = bookingRepository.findAllByUserIdApproved(userId);
+        List<Booking> completedBookings = bookingRepository
+                .findCompletedByUserAndItem(userId, itemId);
 
-        List<Booking> result = bookings.stream()
-                //.filter(b -> b.getStatus() == Status.APPROVED)
-                .filter(b -> Objects.equals(b.getItem().getId(), itemId))
-
-                .toList();
-        if (result.isEmpty()) {
-            throw new ValidationException("Пользователь с id=" + userId + " не брал в аренду вещь с id=" + itemId);
+        if (completedBookings.isEmpty()) {
+            throw new ValidationException(
+                    "Пользователь с id=" + userId + " не брал в аренду вещь с id=" + itemId
+            );
         }
     }
 }

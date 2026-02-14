@@ -2,7 +2,9 @@ package ru.practicum.shareit.item;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.practicum.shareit.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,9 +19,12 @@ public class Item {
     private String description;
     private Boolean available;
 
-    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    List<Comment> comments;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
 
 }

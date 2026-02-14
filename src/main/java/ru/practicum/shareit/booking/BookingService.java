@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequest;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -16,6 +17,9 @@ public interface BookingService {
     BookingDto getBookingInfo(Long bookingId);
 
     List<BookingDto> getAllBookingsByUserAndStates(Long userId, States state);
+
+    @Transactional(readOnly = true)
+    List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state);
 
     Optional<LocalDateTime> getLastDateBooking(Long itemId);
 

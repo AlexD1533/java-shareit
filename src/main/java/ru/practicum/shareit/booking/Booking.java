@@ -21,6 +21,7 @@ public class Booking {
     LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     Status status;
     @ManyToOne
     @JoinColumn(name = "booker_id", nullable = false)
