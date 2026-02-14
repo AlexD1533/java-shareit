@@ -3,15 +3,18 @@ package ru.practicum.shareit.validation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.DuplicatedDataException;
+import ru.practicum.shareit.exception.InternalServerException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.UserJpaRepository;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -93,5 +96,19 @@ public class Validation {
             throw new ValidationException("Пользователь с id=" + userId + " не является владельцем бронирования или владельцем вещи");
         }
 
+    }
+
+    public void ownerExistValidation(Long ownerId) {
+        List<Item> ownerItem = itemRepository.findAllByOwnerId(ownerId);
+        if (ownerItem.isEmpty()) {
+            throw new ValidationException("Пользователь с id=" + ownerId + " не является владельцем ни одной вещи");
+        }
+
+    }
+
+    public void userIdForGetBookingsValidation(Long ownerId) {
+        if (!userRepository.existsById(ownerId)) {
+            throw new InternalServerException("Пользователь с id=" + ownerId + " не найден");
+        }
     }
 }

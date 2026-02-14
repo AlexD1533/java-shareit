@@ -53,4 +53,54 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE u.id = :userId " +
             "ORDER BY b.startDate DESC")
     List<Booking> findAllByUserId(@Param("userId") Long userId);
+
+
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId= :ownerId " +
+            "AND b.status = 'APPROVED' " +
+            "AND b.startDate < CURRENT_TIMESTAMP " +
+            "AND b.endDate >= CURRENT_TIMESTAMP " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdAndStateCurrent(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "AND b.status = 'APPROVED' " +
+            "AND b.endDate <= CURRENT_TIMESTAMP " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdAndStatePast(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "AND b.status = 'APPROVED' " +
+            "AND b.startDate >= CURRENT_TIMESTAMP " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdAndStateFuture(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "AND b.status = 'WAITING' " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdAndStateWaiting(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "AND b.status = 'REJECTED' " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerIdAndStateRejected(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.item i " +
+            "WHERE i.ownerId = :ownerId " +
+            "ORDER BY b.startDate DESC")
+    List<Booking> findAllByOwnerId(@Param("ownerId") Long ownerId);
+
+
+
 }

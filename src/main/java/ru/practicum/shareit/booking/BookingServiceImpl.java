@@ -54,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new NotFoundException("Бронирование с id=" + bookingId + " не найдено"));
-        return BookingMapper.mapToBookingDto(bookingRepository.save(booking));
+        return BookingMapper.mapToBookingDto(booking);
 
 
     }
@@ -74,17 +74,45 @@ public class BookingServiceImpl implements BookingService {
                 result = bookingRepository.findAllByUserIdAndStateFuture(userId);
                 break;
             case WAITING:
-                result =bookingRepository.findAllByUserIdAndStateWaiting(userId);
+                result = bookingRepository.findAllByUserIdAndStateWaiting(userId);
                 break;
             case REJECTED:
-                result =bookingRepository.findAllByUserIdAndStateRejected(userId);
+                result = bookingRepository.findAllByUserIdAndStateRejected(userId);
                 break;
             case ALL:
-                result =bookingRepository.findAllByUserId(userId);
+                result = bookingRepository.findAllByUserId(userId);
 
         }
         return BookingMapper.mapToBookingDtoToList(result);
 
     }
 
+    public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state) {
+
+        List<Booking> result;
+
+        switch (state) {
+            case CURRENT:
+                result = bookingRepository.findAllByOwnerIdAndStateCurrent(ownerId);
+                break;
+            case PAST:
+                result = bookingRepository.findAllByOwnerIdAndStatePast(ownerId);
+                break;
+            case FUTURE:
+                result = bookingRepository.findAllByOwnerIdAndStateFuture(ownerId);
+                break;
+            case WAITING:
+                result = bookingRepository.findAllByOwnerIdAndStateWaiting(ownerId);
+                break;
+            case REJECTED:
+                result = bookingRepository.findAllByOwnerIdAndStateRejected(ownerId);
+                break;
+            case ALL:
+                result = bookingRepository.findAllByOwnerId(ownerId);
+                break;
+            default:
+                result = new ArrayList<>();
+        }
+        return BookingMapper.mapToBookingDtoToList(result);
+    }
 }
