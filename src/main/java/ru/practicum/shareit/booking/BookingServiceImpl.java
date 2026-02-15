@@ -13,7 +13,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserJpaRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
