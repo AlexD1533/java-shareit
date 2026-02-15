@@ -18,7 +18,6 @@ public interface BookingService {
 
     List<BookingDto> getAllBookingsByUserAndStates(Long userId, States state);
 
-    @Transactional(readOnly = true)
     List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state);
 
     Optional<LocalDateTime> getLastDateBooking(Long itemId);

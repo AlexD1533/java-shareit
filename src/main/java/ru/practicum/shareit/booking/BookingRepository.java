@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +29,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND b.status = 'APPROVED' " +
             "AND b.endDate <= CURRENT_TIMESTAMP " +
             "ORDER BY b.startDate DESC")
-    List<Booking> findAllByUserIdAndStatePast(@Param("userId") Long userId);  // Ang → And
+    List<Booking> findAllByUserIdAndStatePast(@Param("userId") Long userId);
 
     @Query("SELECT b FROM Booking b " +
             "JOIN b.booker u " +
@@ -38,14 +37,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND b.status = 'APPROVED' " +
             "AND b.startDate >= CURRENT_TIMESTAMP " +
             "ORDER BY b.startDate DESC")
-    List<Booking> findAllByUserIdAndStateFuture(@Param("userId") Long userId);  // Ang → And
+    List<Booking> findAllByUserIdAndStateFuture(@Param("userId") Long userId);
 
     @Query("SELECT b FROM Booking b " +
             "JOIN b.booker u " +
             "WHERE u.id = :userId " +
             "AND b.status = 'WAITING' " +
             "ORDER BY b.startDate DESC")
-    List<Booking> findAllByUserIdAndStateWaiting(@Param("userId") Long userId);  // Ang → And
+    List<Booking> findAllByUserIdAndStateWaiting(@Param("userId") Long userId);
 
     @Query("SELECT b FROM Booking b " +
             "JOIN b.booker u " +
@@ -69,13 +68,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findCompletedByUserAndItem(@Param("userId") Long userId,
                                              @Param("itemId") Long itemId);
 
-
-    @Query("SELECT b FROM Booking b " +
-            "JOIN b.booker u " +
-            "WHERE u.id = :userId " +
-            "AND b.startDate < CURRENT_TIMESTAMP " +
-            "ORDER BY b.startDate DESC")
-    List<Booking> findAllByUserIdApproved(@Param("userId") Long userId);
 
 
     @Query("SELECT b FROM Booking b " +
@@ -123,18 +115,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.startDate DESC")
     List<Booking> findAllByOwnerId(@Param("ownerId") Long ownerId);
 
-    @Query("SELECT b FROM Booking b " +
-            "JOIN b.item i " +
-            "WHERE i.owner.id= :ownerId " +
-            "AND b.status = 'APPROVED' " +
-            "ORDER BY b.startDate DESC")
-    List<Booking> findAllByOwnerIdApproved(@Param("ownerId") Long ownerId);
 
 
-
-    @Query("SELECT b.endDate FROM Booking b " +  // Изменено с startDate на endDate
+    @Query("SELECT b.endDate FROM Booking b " +
             "WHERE b.item.id = :itemId " +
-            "AND b.endDate < CURRENT_TIMESTAMP " +  // Изменено условие
+            "AND b.endDate < CURRENT_TIMESTAMP " +
             "AND b.status = 'APPROVED' " +
             "ORDER BY b.endDate DESC")
     List<LocalDateTime> findLastDateBookingByItemId(@Param("itemId") Long itemId, Pageable pageable);

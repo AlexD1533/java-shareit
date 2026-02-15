@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
     private final UserJpaRepository userRepository;
 
     @Override
-    @Transactional
     public UserDto create(NewUserRequest request) {
 
         User user = UserMapper.mapToUser(request);
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserDto updateUser(long userId, UpdateUserRequest request) {
 
         User updatedUser = userRepository.findById(userId)
@@ -40,7 +38,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Collection<UserDto> getAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper::mapToUserDto)
@@ -48,7 +45,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserDto getById(long id) {
 
         User user = userRepository.findById(id)
@@ -57,7 +53,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
 
         userRepository.deleteById(id);

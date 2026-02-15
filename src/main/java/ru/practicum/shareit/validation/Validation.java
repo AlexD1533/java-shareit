@@ -120,10 +120,14 @@ public class Validation {
         List<Booking> completedBookings = bookingRepository
                 .findCompletedByUserAndItem(userId, itemId);
 
+        //System.out.println("///////////////" + completedBookings);
+
         if (completedBookings.isEmpty()) {
             throw new ValidationException(
                     "Пользователь с id=" + userId + " не брал в аренду вещь с id=" + itemId
             );
         }
     }
+
+
 }

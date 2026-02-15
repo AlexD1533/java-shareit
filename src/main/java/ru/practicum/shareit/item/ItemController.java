@@ -52,10 +52,12 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDtoWithDates getItem(@PathVariable Long itemId) {
+    public ItemDtoWithDates getItem(@PathVariable Long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId ) {
         log.info("Вещь: запрос на получение по id={}", itemId);
         validation.itemExistValidation(itemId);
-        return itemServiceImpl.getById(itemId);
+        validation.userIdValidation(userId);
+        return itemServiceImpl.getById(itemId, userId);
     }
 
     @GetMapping
@@ -93,7 +95,5 @@ public class ItemController {
         return comment;
 
     }
-
-
 }
 

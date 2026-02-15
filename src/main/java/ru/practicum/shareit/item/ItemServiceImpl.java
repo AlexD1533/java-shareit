@@ -25,17 +25,15 @@ public class ItemServiceImpl implements ItemService {
     private final UserJpaRepository userRepository;
 
     @Override
-    @Transactional
     public ItemDto create(Long userId, NewItemRequest request) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
         Item newItem = ItemMapper.mapToItem(request, owner);
         return itemMapper.mapToItemDto(itemRepository.save(newItem));
-
     }
 
+
     @Override
-    @Transactional
     public ItemDto update(Long itemId, UpdateItemRequest request) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
@@ -46,27 +44,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public ItemDtoWithDates getById(Long itemId) {
+    public ItemDtoWithDates getById(Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Вещи с id: " + itemId + " не существует"));
-        return itemMapper.mapToItemDtoWithDates(item);
+        return itemMapper.mapToItemDtoWithDates(item, userId);
 
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemDtoWithDates> getAllByUserId(Long userId) {
 
         List<Item> itemsList = itemRepository.findAllByOwnerId(userId);
         return itemsList.stream()
-                .map(itemMapper::mapToItemDtoWithDates)
+                .map(i -> itemMapper.mapToItemDtoWithDates(i, userId))
                 .toList();
 
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemDto> getByText(String text) {
         List<Item> itemsList = itemRepository.findAllByText(text);
         return itemsList.stream()
@@ -74,9 +69,8 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
     }
 
-@Override
-@Transactional(isolation = Isolation.SERIALIZABLE)
-public CommentDto createComment(Long userId, Long itemId, NewCommentRequest request) {
+    @Override
+    public CommentDto createComment(Long userId, Long itemId, NewCommentRequest request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));

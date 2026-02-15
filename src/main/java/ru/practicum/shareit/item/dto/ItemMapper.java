@@ -57,7 +57,7 @@ public class ItemMapper {
     }
 
 
-    public ItemDtoWithDates mapToItemDtoWithDates(Item item) {
+    public ItemDtoWithDates mapToItemDtoWithDates(Item item, Long userId) {
         ItemDtoWithDates dto = new ItemDtoWithDates();
         dto.setId(item.getId());
         dto.setName(item.getName());
@@ -65,36 +65,44 @@ public class ItemMapper {
         dto.setAvailable(item.getAvailable());
         dto.setOwnerId(item.getOwner().getId());
 
-        LocalDateTime lastDate = bookingService.getLastDateBooking(item.getId()).orElse(null);
-        LocalDateTime nextDate = bookingService.getNextDateBooking(item.getId()).orElse(null);
 
         List<CommentDto> comments = commentMapper.mapToCommentDto(item.getComments());
         dto.setComments(comments);
-        dto.setLastBooking(lastDate);
-        dto.setNextBooking(nextDate);
+
+        if (userId.equals(item.getOwner().getId())) {
+            LocalDateTime lastDate = bookingService.getLastDateBooking(item.getId()).orElse(null);
+            LocalDateTime nextDate = bookingService.getNextDateBooking(item.getId()).orElse(null);
+            dto.setLastBooking(lastDate);
+            dto.setNextBooking(nextDate);
+
+        } else {
+            dto.setLastBooking(null);
+            dto.setNextBooking(null);
+            return dto;
+        }
         return dto;
     }
 
 
-    public static ItemSmallDto mapToItemSmallDto(Item item) {
-        ItemSmallDto dto = new ItemSmallDto();
-        dto.setId(item.getId());
-        dto.setName(item.getName());
+        public static ItemSmallDto mapToItemSmallDto (Item item){
+            ItemSmallDto dto = new ItemSmallDto();
+            dto.setId(item.getId());
+            dto.setName(item.getName());
 
-        return dto;
+            return dto;
+        }
+
+        public static Item updateItemFields (Item item, UpdateItemRequest request){
+            if (request.getName() != null && !request.getName().isBlank()) {
+                item.setName(request.getName());
+            }
+            if (request.getDescription() != null && !request.getDescription().isBlank()) {
+                item.setDescription(request.getDescription());
+            }
+            if (request.getAvailable() != null) {
+                item.setAvailable(request.getAvailable());
+            }
+
+            return item;
+        }
     }
-
-    public static Item updateItemFields(Item item, UpdateItemRequest request) {
-        if (request.getName() != null && !request.getName().isBlank()) {
-            item.setName(request.getName());
-        }
-        if (request.getDescription() != null && !request.getDescription().isBlank()) {
-            item.setDescription(request.getDescription());
-        }
-        if (request.getAvailable() != null) {
-            item.setAvailable(request.getAvailable());
-        }
-
-        return item;
-    }
-}

@@ -29,7 +29,6 @@ public class BookingServiceImpl implements BookingService {
     private final ItemJpaRepository itemRepository;
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     public BookingDto create(Long userId, BookingRequest request) {
 
         User user = userRepository.findById(userId)
@@ -43,7 +42,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
     public BookingDto confirmationBooking(Long bookingId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new NotFoundException("Бронирование с id=" + bookingId + " не найдено"));
@@ -58,7 +56,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public BookingDto getBookingInfo(Long bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
@@ -69,7 +66,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookingDto> getAllBookingsByUserAndStates(Long userId, States state) {
         List<Booking> result = switch (state) {
             case CURRENT -> bookingRepository.findAllByUserIdAndStateCurrent(userId);
@@ -83,7 +79,6 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.mapToBookingDtoToList(result);
 
     }
-@Transactional(readOnly = true)
 @Override
 public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state) {
 
@@ -101,7 +96,6 @@ public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<LocalDateTime> getLastDateBooking(Long itemId) {
         return bookingRepository.findLastDateBookingByItemId(
                         itemId, PageRequest.of(0, 1))
@@ -110,7 +104,6 @@ public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<LocalDateTime> getNextDateBooking(Long itemId) {
         return bookingRepository.findNextDateBookingByItemId(
                         itemId, PageRequest.of(0, 1))

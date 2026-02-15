@@ -13,7 +13,7 @@ public interface ItemService {
 
     ItemDto update(Long itemId, UpdateItemRequest request);
 
-    ItemDtoWithDates getById(Long itemId);
+    ItemDtoWithDates getById(Long itemId, Long userId);
 
     List<ItemDtoWithDates> getAllByUserId(Long userId);
 
