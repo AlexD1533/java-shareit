@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long bookingId;
@@ -30,6 +30,5 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     Item item;
-
 
 }

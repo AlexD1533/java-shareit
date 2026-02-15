@@ -53,7 +53,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDtoWithDates getItem(@PathVariable Long itemId,
-                                    @RequestHeader("X-Sharer-User-Id") Long userId ) {
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение по id={}", itemId);
         validation.itemExistValidation(itemId);
         validation.userIdValidation(userId);

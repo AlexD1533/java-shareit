@@ -41,18 +41,6 @@ public final class BookingMapper {
         return dto;
     }
 
-    public static Booking updateBookingFields(Booking booking, UpdateBookingRequest request) {
-        if (request.getStartDate() != null) {
-            booking.setStartDate(request.getStartDate());
-        }
-        if (request.getEndDate() != null) {
-            booking.setEndDate(request.getEndDate());
-        }
-        if (request.getStatus() != null) {
-            booking.setStatus(request.getStatus());
-        }
-        return booking;
-    }
 
     public static List<BookingDto> mapToBookingDtoToList(List<Booking> all) {
         return all.stream()

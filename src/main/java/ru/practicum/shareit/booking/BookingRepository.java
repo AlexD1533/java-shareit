@@ -68,8 +68,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findCompletedByUserAndItem(@Param("userId") Long userId,
                                              @Param("itemId") Long itemId);
 
-
-
     @Query("SELECT b FROM Booking b " +
             "JOIN b.item i " +
             "WHERE i.owner.id= :ownerId " +
@@ -114,7 +112,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE i.owner.id = :ownerId " +
             "ORDER BY b.startDate DESC")
     List<Booking> findAllByOwnerId(@Param("ownerId") Long ownerId);
-
 
 
     @Query("SELECT b.endDate FROM Booking b " +

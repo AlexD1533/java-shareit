@@ -27,7 +27,6 @@ public class CommentMapper {
         dto.setId(comment.getId());
         dto.setText(comment.getText());
 
-        // Важно! authorName должно быть именем пользователя, а не объектом
         if (comment.getAuthor() != null) {
             dto.setAuthorName(comment.getAuthor().getName());
         }

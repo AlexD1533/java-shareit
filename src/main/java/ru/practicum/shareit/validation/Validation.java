@@ -3,11 +3,9 @@ package ru.practicum.shareit.validation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ServerErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.Status;
+
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.InternalServerException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -21,7 +19,6 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-
 public class Validation {
 
     private final UserJpaRepository userRepository;
@@ -119,8 +116,6 @@ public class Validation {
         userIdValidation(userId);
         List<Booking> completedBookings = bookingRepository
                 .findCompletedByUserAndItem(userId, itemId);
-
-        //System.out.println("///////////////" + completedBookings);
 
         if (completedBookings.isEmpty()) {
             throw new ValidationException(

@@ -3,8 +3,6 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingRequest;
@@ -61,8 +59,6 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new NotFoundException("Бронирование с id=" + bookingId + " не найдено"));
         return BookingMapper.mapToBookingDto(booking);
-
-
     }
 
     @Override
@@ -77,10 +73,10 @@ public class BookingServiceImpl implements BookingService {
         };
 
         return BookingMapper.mapToBookingDtoToList(result);
-
     }
-@Override
-public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state) {
+
+    @Override
+    public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States state) {
 
         List<Booking> result = switch (state) {
             case CURRENT -> bookingRepository.findAllByOwnerIdAndStateCurrent(ownerId);
@@ -89,7 +85,6 @@ public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States
             case WAITING -> bookingRepository.findAllByOwnerIdAndStateWaiting(ownerId);
             case REJECTED -> bookingRepository.findAllByOwnerIdAndStateRejected(ownerId);
             case ALL -> bookingRepository.findAllByOwnerId(ownerId);
-            default -> new ArrayList<>();
         };
 
         return BookingMapper.mapToBookingDtoToList(result);
@@ -110,6 +105,4 @@ public List<BookingDto> getAllBookingsByOwnerItemsAndStates(Long ownerId, States
                 .stream()
                 .findFirst();
     }
-
-
 }

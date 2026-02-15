@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -24,8 +25,8 @@ public class BookingRequest {
 
     @AssertTrue(message = "Дата окончания должна быть позже даты начала")
     public boolean isEndAfterStart() {
-        if (start == null || end== null) {
-            return true; // Пусть @NotNull обрабатывает null значения
+        if (start == null || end == null) {
+            return true;
         }
         return end.isAfter(start);
     }

@@ -41,7 +41,6 @@ public class ItemMapper {
         return dto;
     }
 
-
     public ItemDtoWithComments mapToItemDtoWithComments(Item item) {
         ItemDtoWithComments dto = new ItemDtoWithComments();
         dto.setId(item.getId());
@@ -55,7 +54,6 @@ public class ItemMapper {
 
         return dto;
     }
-
 
     public ItemDtoWithDates mapToItemDtoWithDates(Item item, Long userId) {
         ItemDtoWithDates dto = new ItemDtoWithDates();
@@ -84,25 +82,25 @@ public class ItemMapper {
     }
 
 
-        public static ItemSmallDto mapToItemSmallDto (Item item){
-            ItemSmallDto dto = new ItemSmallDto();
-            dto.setId(item.getId());
-            dto.setName(item.getName());
+    public static ItemSmallDto mapToItemSmallDto(Item item) {
+        ItemSmallDto dto = new ItemSmallDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
 
-            return dto;
-        }
-
-        public static Item updateItemFields (Item item, UpdateItemRequest request){
-            if (request.getName() != null && !request.getName().isBlank()) {
-                item.setName(request.getName());
-            }
-            if (request.getDescription() != null && !request.getDescription().isBlank()) {
-                item.setDescription(request.getDescription());
-            }
-            if (request.getAvailable() != null) {
-                item.setAvailable(request.getAvailable());
-            }
-
-            return item;
-        }
+        return dto;
     }
+
+    public static Item updateItemFields(Item item, UpdateItemRequest request) {
+        if (request.getName() != null && !request.getName().isBlank()) {
+            item.setName(request.getName());
+        }
+        if (request.getDescription() != null && !request.getDescription().isBlank()) {
+            item.setDescription(request.getDescription());
+        }
+        if (request.getAvailable() != null) {
+            item.setAvailable(request.getAvailable());
+        }
+
+        return item;
+    }
+}

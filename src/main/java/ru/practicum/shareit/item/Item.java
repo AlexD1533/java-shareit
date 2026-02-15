@@ -11,9 +11,9 @@ import java.util.List;
 @Entity
 @Table(name = "items")
 public class Item {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "item_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long id;
     private String name;
     private String description;
@@ -25,6 +25,5 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
-
 
 }

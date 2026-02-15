@@ -1,9 +1,8 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequest;
-import ru.practicum.shareit.item.dto.ItemDto;
+
 
 import java.time.LocalDateTime;
 import java.util.List;

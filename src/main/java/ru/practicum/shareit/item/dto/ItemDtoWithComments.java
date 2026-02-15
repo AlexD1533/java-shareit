@@ -12,7 +12,6 @@ public class ItemDtoWithComments {
     private Long ownerId;
 
     List<CommentDto> comments;
-
 }
 
 
