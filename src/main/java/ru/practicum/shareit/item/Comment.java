@@ -24,5 +24,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User author;
+    @Column(name = "create_date")
+
     LocalDateTime created;
 }
