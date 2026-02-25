@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import ru.practicum.shareit.booking.BookingServiceImpl;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.request.RequestItem;
+import ru.practicum.shareit.item.request.RequestItemRepository;
 import ru.practicum.shareit.user.User;
 
 
@@ -18,8 +21,9 @@ public class ItemMapper {
 
     private final BookingServiceImpl bookingService;
     private final CommentMapper commentMapper;
+    private final RequestItemRepository requestItemRepository;
 
-    public static Item mapToItem(NewItemRequest request, User owner) {
+    public Item mapToItem(NewItemRequest request, User owner) {
         Item item = new Item();
         item.setName(request.getName());
         item.setDescription(request.getDescription());
@@ -27,7 +31,11 @@ public class ItemMapper {
         item.setOwner(owner);
 
         if (request.getRequestId() != null) {
-            item.setRequestId(request.getRequestId());
+            RequestItem requestItem = requestItemRepository.findById(request.getRequestId()).orElseThrow(() ->
+                    new NotFoundException("Запроса с id " + request.getRequestId() + " не существует"));
+            item.setRequestId(requestItem);
+        } else {
+            item.setRequestId(null);
         }
 
         return item;
@@ -44,7 +52,6 @@ public class ItemMapper {
 
         return dto;
     }
-
 
 
     public ItemDtoWithDates mapToItemDtoWithDates(Item item, Long userId) {

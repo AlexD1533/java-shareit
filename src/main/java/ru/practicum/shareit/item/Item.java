@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.practicum.shareit.item.request.RequestItem;
 import ru.practicum.shareit.user.User;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class Item {
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "request_id", nullable = false)
-    Long requestId;
+    @JoinColumn(name = "request_id", nullable = true)
+    private RequestItem requestId;
 
 }

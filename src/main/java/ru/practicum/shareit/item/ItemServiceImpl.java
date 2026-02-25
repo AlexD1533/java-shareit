@@ -7,6 +7,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 
 import ru.practicum.shareit.item.dto.*;
 
+import ru.practicum.shareit.item.request.RequestItem;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserJpaRepository;
 
@@ -26,7 +27,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto create(Long userId, NewItemRequest request) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
-        Item newItem = ItemMapper.mapToItem(request, owner);
+
+        Item newItem = itemMapper.mapToItem(request, owner);
         return itemMapper.mapToItemDto(itemRepository.save(newItem));
     }
 

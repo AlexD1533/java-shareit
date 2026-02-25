@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class RequestItemMapper {
 
 
-    public static RequestItem mapToRequestItem(NewRequestItem requestDto) {
+    public  RequestItem mapToRequestItem(NewRequestItem requestDto) {
         RequestItem requestItem = new RequestItem();
         requestItem.setDescription(requestDto.getDescription());
         requestItem.setCreated(LocalDateTime.now());
@@ -22,13 +22,12 @@ public class RequestItemMapper {
     }
 
 
-    public static RequestItemDto mapToResponseFullDto(RequestItem requestItem) {
+    public RequestItemDto mapToResponseFullDto(RequestItem requestItem) {
         RequestItemDto dto = new RequestItemDto();
         dto.setId(requestItem.getId());
         dto.setDescription(requestItem.getDescription());
         dto.setCreated(requestItem.getCreated());
 
-        // Преобразуем список вещей в ResponseItemDto
         List<ResponseItemDto> itemDtos = new ArrayList<>();
         if (requestItem.getItems() != null) {
             itemDtos = requestItem.getItems().stream()
