@@ -15,4 +15,7 @@ public class NewItemRequest {
     @NotNull(message = "Статус доступности обязателен")
     private Boolean available;
 
+    Long requestId;
+
+
 }

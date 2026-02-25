@@ -26,6 +26,10 @@ public class ItemMapper {
         item.setAvailable(request.getAvailable());
         item.setOwner(owner);
 
+        if (request.getRequestId() != null) {
+            item.setRequestId(request.getRequestId());
+        }
+
         return item;
     }
 
@@ -41,19 +45,7 @@ public class ItemMapper {
         return dto;
     }
 
-    public ItemDtoWithComments mapToItemDtoWithComments(Item item) {
-        ItemDtoWithComments dto = new ItemDtoWithComments();
-        dto.setId(item.getId());
-        dto.setName(item.getName());
-        dto.setDescription(item.getDescription());
-        dto.setAvailable(item.getAvailable());
-        dto.setOwnerId(item.getOwner().getId());
 
-        List<CommentDto> comments = commentMapper.mapToCommentDto(item.getComments());
-        dto.setComments(comments);
-
-        return dto;
-    }
 
     public ItemDtoWithDates mapToItemDtoWithDates(Item item, Long userId) {
         ItemDtoWithDates dto = new ItemDtoWithDates();
