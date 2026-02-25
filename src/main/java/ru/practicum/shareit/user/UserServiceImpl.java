@@ -12,32 +12,33 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
     @Override
     public UserDto create(NewUserRequest request) {
 
         User user = UserMapper.mapToUser(request);
-        user = userRepository.create(user);
+        user = userRepository.save(user);
         return UserMapper.mapToUserDto(user);
     }
 
     @Override
     public UserDto updateUser(long userId, UpdateUserRequest request) {
 
-        User updatedUser = userRepository.getById(userId)
+        User updatedUser = userRepository.findById(userId)
                 .map(user -> UserMapper.updateUserFields(user, request))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        updatedUser = userRepository.update(updatedUser);
+        updatedUser = userRepository.save(updatedUser);
 
         return UserMapper.mapToUserDto(updatedUser);
     }
 
     @Override
     public Collection<UserDto> getAll() {
-        return userRepository.getAll().stream()
+        return userRepository.findAll().stream()
                 .map(UserMapper::mapToUserDto)
                 .toList();
     }
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getById(long id) {
 
-        User user = userRepository.getById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + id));
         return UserMapper.mapToUserDto(user);
     }

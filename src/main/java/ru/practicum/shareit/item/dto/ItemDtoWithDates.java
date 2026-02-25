@@ -2,11 +2,11 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class ItemDto {
+public class ItemDtoWithDates {
 
     private Long id;
     private String name;
@@ -14,6 +14,8 @@ public class ItemDto {
     private Boolean available;
     private Long ownerId;
 
-    List<CommentDto> comments;
+    LocalDateTime lastBooking;
+    LocalDateTime nextBooking;
 
+    List<CommentDto> comments;
 }

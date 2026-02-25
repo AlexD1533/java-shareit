@@ -1,0 +1,43 @@
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    item_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    available BOOLEAN,
+    owner_id INTEGER NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users (user_id) ON DELETE RESTRICT
+
+);
+
+
+CREATE TABLE IF NOT EXISTS bookings (
+
+ booking_id SERIAL PRIMARY KEY,
+ start_date TIMESTAMP WITHOUT TIME ZONE,
+ end_date TIMESTAMP WITHOUT TIME ZONE,
+ item_id INTEGER NOT NULL,
+ booker_id INTEGER NOT NULL,
+ status VARCHAR(255) NOT NULL,
+
+ FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE RESTRICT,
+ FOREIGN KEY (booker_id) REFERENCES users (user_id) ON DELETE RESTRICT
+
+);
+
+
+CREATE TABLE IF NOT EXISTS comments (
+    comment_id SERIAL PRIMARY KEY,
+    content VARCHAR(255) NOT NULL UNIQUE,
+    item_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    create_date TIMESTAMP WITHOUT TIME ZONE,
+
+    FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE RESTRICT,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT
+);

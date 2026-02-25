@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.validation.Validation;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
 
 
 import java.util.ArrayList;
@@ -54,14 +52,16 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@PathVariable Long itemId) {
+    public ItemDtoWithDates getItem(@PathVariable Long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение по id={}", itemId);
         validation.itemExistValidation(itemId);
-        return itemServiceImpl.getById(itemId);
+        validation.userIdValidation(userId);
+        return itemServiceImpl.getById(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemDto> getUserItems(
+    public List<ItemDtoWithDates> getUserItems(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение всех вещей пользователя)");
         validation.userIdValidation(userId);
@@ -79,6 +79,21 @@ public class ItemController {
             return new ArrayList<>(0);
         }
         return itemServiceImpl.getByText(text);
+    }
+
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto createItem(
+            @PathVariable Long itemId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @Valid @RequestBody NewCommentRequest request) {
+        log.info("Комментарий: запрос на создание {}", request);
+        validation.itemExistValidation(itemId);
+        validation.userFromCommentValidation(userId, itemId);
+        CommentDto comment = itemServiceImpl.createComment(userId, itemId, request);
+        log.info("Комментарий создан с id={}", comment.getId());
+        return comment;
+
     }
 }
 
