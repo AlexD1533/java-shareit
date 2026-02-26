@@ -36,7 +36,7 @@ public class RequestItemController {
 
 
     @GetMapping
-    public List<RequestItemDto> createUserRequestsItem(
+    public List<RequestItemDto> getUserRequestsItem(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Запрос: запрос на получение всех запросов пользователя)");
         validation.userIdValidation(userId);
@@ -47,33 +47,19 @@ public class RequestItemController {
 
 
     @GetMapping("/all")
-    public List<RequestItemDto> createAllRequestsItem() {
+    public List<RequestItemDto> getAllRequestsItem() {
         log.info("Запрос: запрос на получение всех запросов пользователей)");
         return requestItemService.getAll();
     }
 
-/*
-    @GetMapping
-    public List<ItemDtoWithDates> getUserItemsAll(
-            @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("Вещь: запрос на получение всех вещей пользователя)");
-        validation.userIdValidation(userId);
-        return itemServiceImpl.getAllByUserId(userId);
+
+
+@GetMapping("/{requestId}")
+    public RequestItemDto getRequestItemById(@PathVariable Long requestId) {
+        log.info("Запрос: запрос на получение запроса по ID)");
+        validation.requestItemExistValidation(requestId);
+        return requestItemService.getRequestItemById(requestId);
     }
-
-
-    @GetMapping("/{itemId}")
-    public ItemDtoWithDates getItem(@PathVariable Long itemId,
-                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("Вещь: запрос на получение по id={}", itemId);
-        validation.itemExistValidation(itemId);
-        validation.userIdValidation(userId);
-        return itemServiceImpl.getById(itemId, userId);
-    }
-
-     */
-
-
 
 
 }

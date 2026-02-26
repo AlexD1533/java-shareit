@@ -12,6 +12,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.request.RequestItemRepository;
 import ru.practicum.shareit.user.UserJpaRepository;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class Validation {
     private final UserJpaRepository userRepository;
     private final ItemJpaRepository itemRepository;
     private final BookingRepository bookingRepository;
+    private final RequestItemRepository requestItemRepository;
 
     public void userIdValidation(Long userId) {
 
@@ -125,4 +127,10 @@ public class Validation {
     }
 
 
+    public void requestItemExistValidation(Long requestId) {
+        if (!requestItemRepository.existsById(requestId)) {
+            throw new NotFoundException("Запрос с id=" + requestId + " не найден");
+        }
+
+    }
 }

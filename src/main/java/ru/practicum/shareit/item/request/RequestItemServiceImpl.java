@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.NotFoundException;
 
 import java.util.List;
 
@@ -26,5 +27,12 @@ public class RequestItemServiceImpl implements RequestItemService {
     public List<RequestItemDto> getAll() {
         List<RequestItem> requestList = requestRepository.findAll();
         return requestItemMapper.mapToResponseFullDtoList(requestList);
+    }
+
+    public RequestItemDto getRequestItemById(Long requestId) {
+        RequestItem requestItem = requestRepository.findById(requestId).orElseThrow(() ->
+        new NotFoundException("Запрос с id=" + requestId + " не найден"));
+
+        return requestItemMapper.mapToResponseFullDto(requestItem);
     }
 }
