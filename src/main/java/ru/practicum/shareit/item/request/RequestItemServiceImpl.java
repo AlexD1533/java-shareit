@@ -3,6 +3,8 @@ package ru.practicum.shareit.item.request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RequestItemServiceImpl implements RequestItemService {
@@ -11,8 +13,13 @@ public class RequestItemServiceImpl implements RequestItemService {
 
     public RequestItemDto create(Long userId, NewRequestItem request) {
 
-        RequestItem newRequestItem = requestItemMapper.mapToRequestItem(request);
-
+        RequestItem newRequestItem = requestItemMapper.mapToRequestItem(userId, request);
         return requestItemMapper.mapToResponseFullDto(requestRepository.save(newRequestItem));
+    }
+
+    public List<RequestItemDto> getAllByUserId(Long userId) {
+        List<RequestItem> requestList = requestRepository.findAllByUserId(userId);
+
+        return requestItemMapper.mapToResponseFullDtoList(requestList);
     }
 }

@@ -2,7 +2,10 @@ package ru.practicum.shareit.item.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserJpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,11 +16,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RequestItemMapper {
 
+    private final UserJpaRepository userRepository;
 
-    public  RequestItem mapToRequestItem(NewRequestItem requestDto) {
+    public  RequestItem mapToRequestItem(Long userId, NewRequestItem requestDto) {
         RequestItem requestItem = new RequestItem();
         requestItem.setDescription(requestDto.getDescription());
         requestItem.setCreated(LocalDateTime.now());
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
+        requestItem.setUser(user);
+
         return requestItem;
     }
 

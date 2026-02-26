@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithDates;
 import ru.practicum.shareit.item.dto.NewItemRequest;
+import ru.practicum.shareit.validation.Validation;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class RequestItemController {
 
     private final RequestItemServiceImpl requestItemService;
+    private final Validation validation;
 
 
     @PostMapping
@@ -32,25 +34,27 @@ public class RequestItemController {
     }
 
 
-    /*
+
     @GetMapping
-    public List<ItemDtoWithDates> getUserItems(
+    public List<RequestItemDto> getUserItems(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("Вещь: запрос на получение всех вещей пользователя)");
+        log.info("Запрос: запрос на получение всех запросов пользователя)");
+        validation.userIdValidation(userId);
+        return requestItemService.getAllByUserId(userId);
+
+    }
+
+
+
+    @GetMapping("/all")
+    public List<RequestItemDto> getUserItems(
+            @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("Запрос: запрос на получение всех запросов пользователей)");
         validation.userIdValidation(userId);
         return itemServiceImpl.getAllByUserId(userId);
     }
 
-
-    @GetMapping
-    public List<ItemDtoWithDates> getUserItems(
-            @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("Вещь: запрос на получение всех вещей пользователя)");
-        validation.userIdValidation(userId);
-        return itemServiceImpl.getAllByUserId(userId);
-    }
-
-
+/*
     @GetMapping
     public List<ItemDtoWithDates> getUserItemsAll(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
