@@ -23,7 +23,7 @@ public class ItemController {
     @PostMapping
     public ItemDto createItem(
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @Valid @RequestBody NewItemRequest request) {
+            @RequestBody NewItemRequest request) {
         log.info("Вещь: запрос на создание {}", request);
         validation.userIdValidation(userId);
         ItemDto createItem = itemServiceImpl.create(userId, request);
@@ -86,7 +86,7 @@ public class ItemController {
     public CommentDto createItem(
             @PathVariable Long itemId,
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @Valid @RequestBody NewCommentRequest request) {
+            @RequestBody NewCommentRequest request) {
         log.info("Комментарий: запрос на создание {}", request);
         validation.itemExistValidation(itemId);
         validation.userFromCommentValidation(userId, itemId);

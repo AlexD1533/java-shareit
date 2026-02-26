@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> getUserById(@PathVariable long userId) {
+    public ResponseEntity<Object> getUserById(@PathVariable @NotNull long userId) {
         log.info("Получение пользователя по id: {}", userId);
         return userClient.getUserById(userId);
     }
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUser(@PathVariable long userId) {
+    public ResponseEntity<Object> deleteUser(@PathVariable @NotNull long userId) {
         log.info("Удаление пользователя: {}", userId);
         return userClient.deleteUser(userId);
     }

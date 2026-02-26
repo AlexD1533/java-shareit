@@ -2,9 +2,12 @@ package ru.practicum.shareit.item;
 
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
 
@@ -13,6 +16,7 @@ import ru.practicum.shareit.item.dto.*;
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
 
 
@@ -40,7 +44,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Object> getItem(@PathVariable Long itemId,
+    public ResponseEntity<Object> getItem(@PathVariable @NotNull Long itemId,
                                           @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Вещь: запрос на получение по id={}", itemId);
 
@@ -70,7 +74,7 @@ public class ItemController {
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @Valid @RequestBody NewCommentRequest request) {
         log.info("Комментарий: запрос на создание {}", request);
-        return itemClient.addComment(userId, itemId, request);
+        return itemClient.addComment(itemId, userId, request);
 
 
     }

@@ -24,7 +24,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@Valid @RequestBody NewUserRequest request) {
+    public UserDto create(@RequestBody NewUserRequest request) {
         log.info("Пользователь: запрос на создание {}", request);
         validation.userEmailValidation(request.getEmail());
 
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@Valid @RequestBody UpdateUserRequest request,
+    public UserDto update(@RequestBody UpdateUserRequest request,
                           @PathVariable Long userId) {
         log.info("Пользователь: запрос на обновление {}", request);
         validation.userEmailValidation(request.getEmail());

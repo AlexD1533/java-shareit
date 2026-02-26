@@ -14,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class BookItemRequestDto {
 
     @NotNull(message = "ID предмета не может быть пустым")
-    @NotBlank(message = "Название не может быть пустым")
     private long itemId;
 
     @NotNull(message = "Дата начала не может быть пустой")
