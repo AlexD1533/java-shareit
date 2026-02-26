@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.request;
+package ru.practicum.shareit.requestItem;
 
 
 import jakarta.persistence.*;

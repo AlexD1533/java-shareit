@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.BookingServiceImpl;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.request.RequestItem;
-import ru.practicum.shareit.item.request.RequestItemRepository;
+import ru.practicum.shareit.requestItem.RequestItem;
+import ru.practicum.shareit.requestItem.RequestItemRepository;
 import ru.practicum.shareit.user.User;
 
 

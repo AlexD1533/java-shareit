@@ -1,12 +1,9 @@
-package ru.practicum.shareit.item.request;
+package ru.practicum.shareit.requestItem;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithDates;
-import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.validation.Validation;
 
 import java.util.List;

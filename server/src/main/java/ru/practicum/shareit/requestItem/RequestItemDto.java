@@ -1,8 +1,5 @@
-package ru.practicum.shareit.item.request;
+package ru.practicum.shareit.requestItem;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 import java.time.LocalDateTime;

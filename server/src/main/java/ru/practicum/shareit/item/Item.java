@@ -2,7 +2,7 @@ package ru.practicum.shareit.item;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.practicum.shareit.item.request.RequestItem;
+import ru.practicum.shareit.requestItem.RequestItem;
 import ru.practicum.shareit.user.User;
 
 import java.util.ArrayList;

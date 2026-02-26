@@ -12,7 +12,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemJpaRepository;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.request.RequestItemRepository;
+import ru.practicum.shareit.requestItem.RequestItemRepository;
 import ru.practicum.shareit.user.UserJpaRepository;
 
 import java.util.List;

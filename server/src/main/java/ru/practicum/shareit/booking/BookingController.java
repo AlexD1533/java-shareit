@@ -24,7 +24,7 @@ public class BookingController {
     @PostMapping
     public BookingDto createBooking(
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @Valid @RequestBody BookingRequest request) {
+            @RequestBody BookingRequest request) {
         log.info("Бронирование: запрос на создание {}", request);
         validation.userIdValidation(userId);
         validation.itemExistValidation(request.getItemId());
