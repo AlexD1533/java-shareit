@@ -22,4 +22,9 @@ public class RequestItemServiceImpl implements RequestItemService {
 
         return requestItemMapper.mapToResponseFullDtoList(requestList);
     }
+
+    public List<RequestItemDto> getAll() {
+        List<RequestItem> requestList = requestRepository.findAll();
+        return requestItemMapper.mapToResponseFullDtoList(requestList);
+    }
 }

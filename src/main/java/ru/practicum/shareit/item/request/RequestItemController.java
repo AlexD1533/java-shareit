@@ -22,7 +22,7 @@ public class RequestItemController {
 
 
     @PostMapping
-    public RequestItemDto createRequestItem(
+    public RequestItemDto createUserRequestsItem(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @Valid @RequestBody NewRequestItem request) {
         log.info("Запрос: запрос на создание запроса{}", request);
@@ -36,7 +36,7 @@ public class RequestItemController {
 
 
     @GetMapping
-    public List<RequestItemDto> getUserItems(
+    public List<RequestItemDto> createUserRequestsItem(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Запрос: запрос на получение всех запросов пользователя)");
         validation.userIdValidation(userId);
@@ -47,11 +47,9 @@ public class RequestItemController {
 
 
     @GetMapping("/all")
-    public List<RequestItemDto> getUserItems(
-            @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<RequestItemDto> createAllRequestsItem() {
         log.info("Запрос: запрос на получение всех запросов пользователей)");
-        validation.userIdValidation(userId);
-        return itemServiceImpl.getAllByUserId(userId);
+        return requestItemService.getAll();
     }
 
 /*
