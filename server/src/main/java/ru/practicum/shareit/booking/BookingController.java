@@ -49,6 +49,7 @@ public class BookingController {
         return updateBooking;
     }
 
+
     @GetMapping("/{bookingId}")
     public BookingDto getBookingInfo(@PathVariable Long bookingId,
                                      @RequestHeader("X-Sharer-User-Id") Long userId) {
