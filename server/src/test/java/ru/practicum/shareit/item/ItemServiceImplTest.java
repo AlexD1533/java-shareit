@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithDates;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.requestItem.NewRequestItem;
-import ru.practicum.shareit.requestItem.RequestItemService;
 import ru.practicum.shareit.requestItem.RequestItemServiceImpl;
 import ru.practicum.shareit.user.UserServiceImpl;
 import ru.practicum.shareit.user.dto.NewUserRequest;
@@ -37,8 +35,6 @@ public class ItemServiceImplTest {
 
     void getItemsByUser() {
 
-
-
         NewUserRequest request = new NewUserRequest("John", "john@bk.com");
         UserDto user = userService.create(request);
         Long userId = user.getId();
@@ -47,8 +43,8 @@ public class ItemServiceImplTest {
         requestItemService.create(userId, requestItem1);
 
 
-        NewItemRequest request1 = new NewItemRequest("Photo Camera", "Canon 50d", true, 3L);
-        NewItemRequest request2 = new NewItemRequest("Guitar", "fender", true, 3L);
+        NewItemRequest request1 = new NewItemRequest("Photo Camera", "Canon 50d", true, null );
+        NewItemRequest request2 = new NewItemRequest("Guitar", "fender", true, null);
 
         itemService.create(userId, request1);
         itemService.create(userId, request2);
