@@ -56,7 +56,7 @@ public class UserController {
         validation.userIdValidation(id);
 
         UserDto user = userServiceImpl.getById(id);
-        log.info("Найден пользователь: {}", user);
+        log.info("Найден  пользователь: {}", user);
         return user;
     }
 
