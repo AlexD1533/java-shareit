@@ -41,3 +41,13 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE RESTRICT,
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT
 );
+
+ CREATE TABLE IF NOT EXISTS requests_item (
+    request_id SERIAL PRIMARY KEY,
+    description VARCHAR(255) NOT NULL UNIQUE,
+    created_date TIMESTAMP WITHOUT TIME ZONE,
+    user_id INTEGER NOT NULL,
+
+    FOREIGN KEY (request_id) REFERENCES items (request_id) ON DELETE RESTRICT,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT
+);
