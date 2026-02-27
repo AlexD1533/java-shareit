@@ -43,7 +43,7 @@ class BookingControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     private BookingDto bookingDto;
     private BookingRequest bookingRequest;
@@ -89,7 +89,7 @@ class BookingControllerTest {
                 .thenReturn(bookingDto);
 
         mvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(bookingRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +119,7 @@ class BookingControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(bookingRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +139,7 @@ class BookingControllerTest {
                 .when(validation).itemExistValidation(bookingRequest.getItemId());
 
         mvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(bookingRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +159,7 @@ class BookingControllerTest {
                 .when(validation).itemStatusValidation(bookingRequest.getItemId());
 
         mvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(bookingRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -206,7 +206,7 @@ class BookingControllerTest {
                 .thenReturn(confirmedBooking);
 
         mvc.perform(patch("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("approved", approved.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -239,7 +239,7 @@ class BookingControllerTest {
                 .thenReturn(rejectedBooking);
 
         mvc.perform(patch("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("approved", approved.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -261,7 +261,7 @@ class BookingControllerTest {
                 .when(validation).ownerItemByBookingValidation(bookingId, userId);
 
         mvc.perform(patch("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("approved", approved.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
@@ -292,7 +292,7 @@ class BookingControllerTest {
         when(bookingServiceImpl.getBookingInfo(bookingId)).thenReturn(bookingDto);
 
         mvc.perform(get("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDto.getId()), Long.class))
@@ -314,7 +314,7 @@ class BookingControllerTest {
                 .when(validation).bookingValidation(bookingId);
 
         mvc.perform(get("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -332,7 +332,7 @@ class BookingControllerTest {
                 .when(validation).creatorOrOwnerBookingValidation(bookingId, userId);
 
         mvc.perform(get("/bookings/{bookingId}", bookingId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -361,7 +361,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -386,7 +386,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -408,7 +408,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
@@ -426,7 +426,7 @@ class BookingControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
@@ -444,7 +444,7 @@ class BookingControllerTest {
                 .thenReturn(Collections.emptyList());
 
         mvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -474,7 +474,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -509,7 +509,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -532,7 +532,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
@@ -551,7 +551,7 @@ class BookingControllerTest {
                 .when(validation).userIdForGetBookingsValidation(ownerId);
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
@@ -570,7 +570,7 @@ class BookingControllerTest {
                 .when(validation).ownerExistValidation(ownerId);
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
@@ -589,7 +589,7 @@ class BookingControllerTest {
                 .thenReturn(Collections.emptyList());
 
         mvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, ownerId)
+                        .header(userIdHeader, ownerId)
                         .param("state", state.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

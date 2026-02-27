@@ -39,7 +39,7 @@ class RequestItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     private RequestItemDto requestItemDto;
     private NewRequestItem newRequestItem;
@@ -69,7 +69,7 @@ class RequestItemControllerTest {
                 .thenReturn(requestItemDto);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newRequestItem))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +119,7 @@ class RequestItemControllerTest {
         when(requestItemService.getAllByUserId(userId)).thenReturn(requests);
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -147,7 +147,7 @@ class RequestItemControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -161,7 +161,7 @@ class RequestItemControllerTest {
         when(requestItemService.getAllByUserId(userId)).thenReturn(Collections.emptyList());
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));

@@ -33,7 +33,7 @@ class RequestItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     private NewRequestItem newRequestItem;
     private ResponseEntity<Object> successResponse;
@@ -53,7 +53,7 @@ class RequestItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newRequestItem))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class RequestItemControllerTest {
         NewRequestItem invalidRequest = new NewRequestItem(null);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +87,7 @@ class RequestItemControllerTest {
         NewRequestItem invalidRequest = new NewRequestItem("");
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +105,7 @@ class RequestItemControllerTest {
         NewRequestItem invalidRequest = new NewRequestItem("   ");
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ class RequestItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newRequestItem))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ class RequestItemControllerTest {
         when(requestItemClient.getUserRequests(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -168,7 +168,7 @@ class RequestItemControllerTest {
         when(requestItemClient.getUserRequests(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -182,7 +182,7 @@ class RequestItemControllerTest {
         when(requestItemClient.getUserRequests(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -286,7 +286,7 @@ class RequestItemControllerTest {
                 .thenReturn(conflictResponse);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(request))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -325,7 +325,7 @@ class RequestItemControllerTest {
                 .thenReturn(badRequestResponse);
 
         mvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(request))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)

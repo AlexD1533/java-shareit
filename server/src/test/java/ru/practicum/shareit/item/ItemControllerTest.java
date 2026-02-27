@@ -40,7 +40,7 @@ class ItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     private ItemDto itemDto;
     private ItemDtoWithDates itemDtoWithDates;
@@ -106,7 +106,7 @@ class ItemControllerTest {
                 .thenReturn(itemDto);
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +134,7 @@ class ItemControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +177,7 @@ class ItemControllerTest {
                 .thenReturn(updatedItemDto);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -205,7 +205,7 @@ class ItemControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -227,7 +227,7 @@ class ItemControllerTest {
                 .when(validation).itemExistValidation(itemId);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -249,7 +249,7 @@ class ItemControllerTest {
                 .when(validation).ownerValidation(itemId, userId);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -270,7 +270,7 @@ class ItemControllerTest {
         when(itemServiceImpl.getById(itemId, userId)).thenReturn(itemDtoWithDates);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoWithDates.getId()), Long.class))
@@ -296,7 +296,7 @@ class ItemControllerTest {
                 .when(validation).itemExistValidation(itemId);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -324,7 +324,7 @@ class ItemControllerTest {
         when(itemServiceImpl.getAllByUserId(userId)).thenReturn(items);
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -351,7 +351,7 @@ class ItemControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -366,7 +366,7 @@ class ItemControllerTest {
         when(itemServiceImpl.getAllByUserId(userId)).thenReturn(Collections.emptyList());
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -394,7 +394,7 @@ class ItemControllerTest {
         when(itemServiceImpl.getByText(searchText)).thenReturn(items);
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("text", searchText)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -424,7 +424,7 @@ class ItemControllerTest {
                 .when(validation).userIdValidation(userId);
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("text", searchText)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
@@ -442,7 +442,7 @@ class ItemControllerTest {
                 .thenReturn(commentDto);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newCommentRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -467,7 +467,7 @@ class ItemControllerTest {
                 .when(validation).itemExistValidation(itemId);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newCommentRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -488,7 +488,7 @@ class ItemControllerTest {
                 .when(validation).userFromCommentValidation(userId, itemId);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newCommentRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)

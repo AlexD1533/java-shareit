@@ -33,7 +33,7 @@ class ItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     private NewItemRequest newItemRequest;
     private UpdateItemRequest updateItemRequest;
@@ -68,7 +68,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +89,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +112,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +158,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -181,7 +181,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -204,7 +204,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -227,7 +227,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -250,7 +250,7 @@ class ItemControllerTest {
         );
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -284,7 +284,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -303,7 +303,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -336,7 +336,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -351,7 +351,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -366,7 +366,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -391,7 +391,7 @@ class ItemControllerTest {
         when(itemClient.getAllByUserId(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -405,7 +405,7 @@ class ItemControllerTest {
         when(itemClient.getAllByUserId(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -419,7 +419,7 @@ class ItemControllerTest {
         when(itemClient.getAllByUserId(userId)).thenReturn(successResponse);
 
         mvc.perform(get("/items")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -443,7 +443,7 @@ class ItemControllerTest {
         when(itemClient.search(eq(userId), eq(searchText))).thenReturn(successResponse);
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("text", searchText)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -459,7 +459,7 @@ class ItemControllerTest {
         when(itemClient.search(eq(userId), eq(searchText))).thenReturn(successResponse);
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("text", searchText)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -475,7 +475,7 @@ class ItemControllerTest {
         when(itemClient.search(eq(userId), eq(searchText))).thenReturn(successResponse);
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .param("text", searchText)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -488,7 +488,7 @@ class ItemControllerTest {
         long userId = 1L;
 
         mvc.perform(get("/items/search")
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
 
@@ -516,7 +516,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(newCommentRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -534,7 +534,7 @@ class ItemControllerTest {
         invalidRequest.setText(null);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -557,7 +557,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -578,7 +578,7 @@ class ItemControllerTest {
                 .thenReturn(successResponse);
 
         mvc.perform(post("/items/{itemId}/comment", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(invalidRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -613,7 +613,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(notFoundResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
@@ -632,7 +632,7 @@ class ItemControllerTest {
                 .thenReturn(conflictResponse);
 
         mvc.perform(patch("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .content(mapper.writeValueAsString(updateItemRequest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -653,7 +653,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(errorResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
 
@@ -671,7 +671,7 @@ class ItemControllerTest {
         when(itemClient.getById(itemId, userId)).thenReturn(badRequestResponse);
 
         mvc.perform(get("/items/{itemId}", itemId)
-                        .header(USER_ID_HEADER, userId)
+                        .header(userIdHeader, userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
