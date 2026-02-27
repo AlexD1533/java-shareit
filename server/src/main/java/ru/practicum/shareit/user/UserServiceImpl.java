@@ -8,7 +8,8 @@ import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 
-import java.util.*;
+import java.util.Collection;
+
 
 @Service
 @RequiredArgsConstructor
