@@ -18,7 +18,7 @@ public class RequestItemMapper {
 
     private final UserJpaRepository userRepository;
 
-    public  RequestItem mapToRequestItem(Long userId, NewRequestItem requestDto) {
+    public RequestItem mapToRequestItem(Long userId, NewRequestItem requestDto) {
         RequestItem requestItem = new RequestItem();
         requestItem.setDescription(requestDto.getDescription());
         requestItem.setCreated(LocalDateTime.now());

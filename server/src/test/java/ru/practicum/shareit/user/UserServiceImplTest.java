@@ -25,19 +25,17 @@ public class UserServiceImplTest {
     private final UserServiceImpl userService;
 
 
-  @Test
-  void testSaveUser() {
+    @Test
+    void testSaveUser() {
 
-      NewUserRequest request = new NewUserRequest("John", "john@bk.com");
-      UserDto user = userService.create(request);
+        NewUserRequest request = new NewUserRequest("John", "john@bk.com");
+        UserDto user = userService.create(request);
 
-      assertThat(user.getId(), notNullValue());
-      assertThat(user.getName(), equalTo(request.getName()));
-      assertThat(user.getEmail(), equalTo(request.getEmail()));
+        assertThat(user.getId(), notNullValue());
+        assertThat(user.getName(), equalTo(request.getName()));
+        assertThat(user.getEmail(), equalTo(request.getEmail()));
 
-  }
-
-
+    }
 
 
 }

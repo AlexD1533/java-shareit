@@ -1,7 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -64,7 +64,6 @@ public class BookingController {
         return bookingClient.confirmBooking(userId, bookingId, approved);
     }
 
-    // НОВЫЙ МЕТОД: все бронирования владельца
     @GetMapping("/owner")
     public ResponseEntity<Object> getOwnerBookings(@RequestHeader("X-Sharer-User-Id") long ownerId,
                                                    @RequestParam(name = "state", defaultValue = "all") String stateParam,

@@ -16,7 +16,6 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
-        // Собираем все ошибки в одну строку
         String errorMessage = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> {
                     String fieldName = ((FieldError) error).getField();

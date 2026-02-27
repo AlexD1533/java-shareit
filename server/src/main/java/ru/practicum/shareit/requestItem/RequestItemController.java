@@ -31,7 +31,6 @@ public class RequestItemController {
     }
 
 
-
     @GetMapping
     public List<RequestItemDto> getUserRequestsItem(
             @RequestHeader("X-Sharer-User-Id") Long userId) {
@@ -42,7 +41,6 @@ public class RequestItemController {
     }
 
 
-
     @GetMapping("/all")
     public List<RequestItemDto> getAllRequestsItem() {
         log.info("Запрос: запрос на получение всех запросов пользователей)");
@@ -50,8 +48,7 @@ public class RequestItemController {
     }
 
 
-
-@GetMapping("/{requestId}")
+    @GetMapping("/{requestId}")
     public RequestItemDto getRequestItemById(@PathVariable Long requestId) {
         log.info("Запрос: запрос на получение запроса по ID)");
         validation.requestItemExistValidation(requestId);

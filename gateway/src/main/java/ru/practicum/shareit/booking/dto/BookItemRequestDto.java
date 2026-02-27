@@ -19,12 +19,12 @@ public class BookItemRequestDto {
     @NotNull(message = "Дата начала не может быть пустой")
     @FutureOrPresent(message = "Дата начала не может быть в прошлом")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	private LocalDateTime start;
+    private LocalDateTime start;
 
     @NotNull(message = "Дата окончания не может быть пустой")
     @Future(message = "Дата окончания должна быть в будущем")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	private LocalDateTime end;
+    private LocalDateTime end;
 
 
     @AssertTrue(message = "Дата окончания должна быть позже даты начала")

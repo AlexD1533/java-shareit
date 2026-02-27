@@ -45,7 +45,6 @@ public class BookingClient extends BaseClient {
         return get("/" + bookingId, userId);
     }
 
-    // НОВЫЙ МЕТОД: подтверждение/отклонение бронирования владельцем
     public ResponseEntity<Object> confirmBooking(long userId, long bookingId, boolean approved) {
         Map<String, Object> parameters = Map.of(
                 "approved", approved
@@ -53,7 +52,6 @@ public class BookingClient extends BaseClient {
         return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
     }
 
-    // НОВЫЙ МЕТОД: получение всех бронирований текущего пользователя (с пагинацией)
     public ResponseEntity<Object> getAllUserBookings(long userId, BookingState state, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "state", state.name(),
@@ -63,7 +61,6 @@ public class BookingClient extends BaseClient {
         return get("?state={state}&from={from}&size={size}", userId, parameters);
     }
 
-    // НОВЫЙ МЕТОД: получение всех бронирований для вещей владельца
     public ResponseEntity<Object> getAllOwnerBookings(long ownerId, BookingState state, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "state", state.name(),

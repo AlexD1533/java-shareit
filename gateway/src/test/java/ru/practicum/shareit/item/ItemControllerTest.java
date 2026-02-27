@@ -314,10 +314,6 @@ class ItemControllerTest {
     }
 
 
-
-
-
-
     @Test
     void updateItem_WithoutUserIdHeader_ShouldReturnInternalServerError() throws Exception {
         long itemId = 1L;

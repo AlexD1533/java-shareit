@@ -32,7 +32,6 @@ public class ItemServiceImplTest {
     private final RequestItemServiceImpl requestItemService;
 
     @Test
-
     void getItemsByUser() {
 
         NewUserRequest request = new NewUserRequest("John", "john@bk.com");
@@ -43,7 +42,7 @@ public class ItemServiceImplTest {
         requestItemService.create(userId, requestItem1);
 
 
-        NewItemRequest request1 = new NewItemRequest("Photo Camera", "Canon 50d", true, null );
+        NewItemRequest request1 = new NewItemRequest("Photo Camera", "Canon 50d", true, null);
         NewItemRequest request2 = new NewItemRequest("Guitar", "fender", true, null);
 
         itemService.create(userId, request1);

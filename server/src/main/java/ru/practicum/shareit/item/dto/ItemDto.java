@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 
-
 import java.util.List;
 
 @Data

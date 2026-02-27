@@ -53,7 +53,7 @@ class UserControllerTest {
                 "john.doe@mail.com"
         );
 
-        newUserRequest = new NewUserRequest("John", "john.doe@mail.com" );
+        newUserRequest = new NewUserRequest("John", "john.doe@mail.com");
 
 
         updateUserRequest = new UpdateUserRequest("John Updated", "john.updated@mail.com");
