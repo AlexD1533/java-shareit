@@ -232,9 +232,9 @@ public class BookingServiceImplTest {
         List<BookingDto> bookings = bookingService.getAllBookingsByOwnerItemsAndStates(ownerId, States.ALL);
 
         assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0).getItem().getId(), equalTo(itemId));
-        assertThat(bookings.get(0).getStatus(), equalTo(Status.WAITING));
-        assertThat(bookings.get(0).isApproved(), equalTo(false));
+        assertThat(bookings.getFirst().getItem().getId(), equalTo(itemId));
+        assertThat(bookings.getFirst().getStatus(), equalTo(Status.WAITING));
+        assertThat(bookings.getFirst().isApproved(), equalTo(false));
     }
 
     @Test
