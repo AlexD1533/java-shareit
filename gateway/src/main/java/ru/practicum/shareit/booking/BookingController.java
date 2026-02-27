@@ -55,7 +55,6 @@ public class BookingController {
         return bookingClient.getBooking(userId, bookingId);
     }
 
-    // НОВЫЙ МЕТОД: подтверждение бронирования
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> confirmBooking(@RequestHeader("X-Sharer-User-Id") long userId,
                                                  @PathVariable long bookingId,
