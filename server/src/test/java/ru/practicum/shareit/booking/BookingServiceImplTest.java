@@ -62,7 +62,6 @@ public class BookingServiceImplTest {
         assertThat(booking.getStatus(), equalTo(Status.WAITING));
         assertThat(booking.getBooker().getId(), equalTo(bookerId));
         assertThat(booking.getItem().getId(), equalTo(itemId));
-        assertThat(booking.isApproved(), equalTo(false)); // WAITING status means not approved
     }
 
     @Test
@@ -93,7 +92,6 @@ public class BookingServiceImplTest {
 
         assertThat(approvedBooking.getId(), equalTo(createdBooking.getId()));
         assertThat(approvedBooking.getStatus(), equalTo(Status.APPROVED));
-
     }
 
     @Test
@@ -124,8 +122,6 @@ public class BookingServiceImplTest {
 
         assertThat(rejectedBooking.getId(), equalTo(createdBooking.getId()));
         assertThat(rejectedBooking.getStatus(), equalTo(Status.REJECTED));
-        // approved field should be false for REJECTED status
-        assertThat(rejectedBooking.isApproved(), equalTo(false));
     }
 
     @Test
@@ -160,7 +156,6 @@ public class BookingServiceImplTest {
         assertThat(bookingInfo.getBooker().getId(), equalTo(bookerId));
         assertThat(bookingInfo.getItem().getId(), equalTo(itemId));
         assertThat(bookingInfo.getStatus(), equalTo(Status.WAITING));
-        assertThat(bookingInfo.isApproved(), equalTo(false));
     }
 
     @Test
@@ -200,7 +195,7 @@ public class BookingServiceImplTest {
         // Получаем все бронирования пользователя
         List<BookingDto> bookings = bookingService.getAllBookingsByUserAndStates(bookerId, States.ALL);
 
-        assertThat(bookings.size(), equalTo(2));
+        assertThat(bookings, hasSize(2));
         assertThat(bookings.get(0).getBooker().getId(), equalTo(bookerId));
         assertThat(bookings.get(1).getBooker().getId(), equalTo(bookerId));
     }
@@ -231,14 +226,13 @@ public class BookingServiceImplTest {
         // Получаем бронирования по вещам владельца
         List<BookingDto> bookings = bookingService.getAllBookingsByOwnerItemsAndStates(ownerId, States.ALL);
 
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.getFirst().getItem().getId(), equalTo(itemId));
-        assertThat(bookings.getFirst().getStatus(), equalTo(Status.WAITING));
-        assertThat(bookings.getFirst().isApproved(), equalTo(false));
+        assertThat(bookings, hasSize(1));
+        assertThat(bookings.get(0).getItem().getId(), equalTo(itemId));
+        assertThat(bookings.get(0).getStatus(), equalTo(Status.WAITING));
     }
 
     @Test
-    void getAllBookingsByUserAndStates_ShouldReturnFilteredByStatus() {
+    void getLastDateBooking_ShouldReturnLastBookingDate() {
         // Создаем владельца вещи
         NewUserRequest ownerRequest = new NewUserRequest("Owner", "owner@bk.com");
         UserDto owner = userService.create(ownerRequest);
@@ -254,19 +248,80 @@ public class BookingServiceImplTest {
         UserDto booker = userService.create(bookerRequest);
         Long bookerId = booker.getId();
 
-        // Создаем бронирование и подтверждаем его
-        LocalDateTime start = LocalDateTime.now().plusDays(1);
-        LocalDateTime end = LocalDateTime.now().plusDays(2);
-        BookingRequest bookingRequest = new BookingRequest(itemId, start, end);
-        BookingDto createdBooking = bookingService.create(bookerId, bookingRequest);
+        // Создаем прошлое бронирование
+        LocalDateTime pastStart = LocalDateTime.now().minusDays(10);
+        LocalDateTime pastEnd = LocalDateTime.now().minusDays(5);
+        BookingRequest pastRequest = new BookingRequest(itemId, pastStart, pastEnd);
+        BookingDto pastBooking = bookingService.create(bookerId, pastRequest);
+        bookingService.confirmationBooking(pastBooking.getId(), true);
 
-        // Подтверждаем бронирование
-        bookingService.confirmationBooking(createdBooking.getId(), true);
+        // Получаем дату последнего бронирования
+        var lastDate = bookingService.getLastDateBooking(itemId);
 
-        // Получаем подтвержденные бронирования
-        List<BookingDto> approvedBookings = bookingService.getAllBookingsByUserAndStates(bookerId, States.ALL);
+        assertThat(lastDate.isPresent(), is(true));
+    }
 
-        assertThat(approvedBookings.size(), equalTo(1));
-        assertThat(approvedBookings.get(0).getStatus(), equalTo(Status.APPROVED));
+    @Test
+    void getNextDateBooking_ShouldReturnNextBookingDate() {
+        // Создаем владельца вещи
+        NewUserRequest ownerRequest = new NewUserRequest("Owner", "owner@bk.com");
+        UserDto owner = userService.create(ownerRequest);
+        Long ownerId = owner.getId();
+
+        // Создаем вещь
+        NewItemRequest itemRequest = new NewItemRequest("Photo Camera", "Canon 50d", true, null);
+        var item = itemService.create(ownerId, itemRequest);
+        Long itemId = item.getId();
+
+        // Создаем пользователя, который будет бронировать
+        NewUserRequest bookerRequest = new NewUserRequest("Booker", "booker@bk.com");
+        UserDto booker = userService.create(bookerRequest);
+        Long bookerId = booker.getId();
+
+        // Создаем будущее бронирование
+        LocalDateTime futureStart = LocalDateTime.now().plusDays(2);
+        LocalDateTime futureEnd = LocalDateTime.now().plusDays(3);
+        BookingRequest futureRequest = new BookingRequest(itemId, futureStart, futureEnd);
+        BookingDto futureBooking = bookingService.create(bookerId, futureRequest);
+        bookingService.confirmationBooking(futureBooking.getId(), true);
+
+        // Получаем дату следующего бронирования
+        var nextDate = bookingService.getNextDateBooking(itemId);
+
+        assertThat(nextDate.isPresent(), is(true));
+    }
+
+    @Test
+    void getLastDateBooking_WithNoBookings_ShouldReturnEmpty() {
+        // Создаем владельца вещи
+        NewUserRequest ownerRequest = new NewUserRequest("Owner", "owner@bk.com");
+        UserDto owner = userService.create(ownerRequest);
+        Long ownerId = owner.getId();
+
+        // Создаем вещь без бронирований
+        NewItemRequest itemRequest = new NewItemRequest("Photo Camera", "Canon 50d", true, null);
+        var item = itemService.create(ownerId, itemRequest);
+        Long itemId = item.getId();
+
+        var lastDate = bookingService.getLastDateBooking(itemId);
+
+        assertThat(lastDate.isPresent(), is(false));
+    }
+
+    @Test
+    void getNextDateBooking_WithNoFutureBookings_ShouldReturnEmpty() {
+        // Создаем владельца вещи
+        NewUserRequest ownerRequest = new NewUserRequest("Owner", "owner@bk.com");
+        UserDto owner = userService.create(ownerRequest);
+        Long ownerId = owner.getId();
+
+        // Создаем вещь
+        NewItemRequest itemRequest = new NewItemRequest("Photo Camera", "Canon 50d", true, null);
+        var item = itemService.create(ownerId, itemRequest);
+        Long itemId = item.getId();
+
+        var nextDate = bookingService.getNextDateBooking(itemId);
+
+        assertThat(nextDate.isPresent(), is(false));
     }
 }
