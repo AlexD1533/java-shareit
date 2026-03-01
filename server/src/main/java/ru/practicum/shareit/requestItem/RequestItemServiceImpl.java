@@ -24,8 +24,8 @@ public class RequestItemServiceImpl implements RequestItemService {
         return requestItemMapper.mapToResponseFullDtoList(requestList);
     }
 
-    public List<RequestItemDto> getAll() {
-        List<RequestItem> requestList = requestRepository.findAll();
+    public List<RequestItemDto> getAllByOwnerIdRequest(Long ownerId) {
+        List<RequestItem> requestList = requestRepository.getAllByOwnerIdRequest(ownerId);
         return requestItemMapper.mapToResponseFullDtoList(requestList);
     }
 

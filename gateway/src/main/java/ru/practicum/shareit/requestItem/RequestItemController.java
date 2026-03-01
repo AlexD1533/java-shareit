@@ -37,9 +37,10 @@ public class RequestItemController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> getAllRequests() {
-        log.info("Получение всех запросов всех пользователей");
-        return requestItemClient.getAllRequests();
+    public ResponseEntity<Object> getAllRequests(
+            @RequestHeader("X-Sharer-User-Id") @NotNull Long ownerId) {
+            log.info("Получение всех запросов всех пользователей");
+        return requestItemClient.getAllRequests(ownerId);
     }
 
     @GetMapping("/{requestId}")

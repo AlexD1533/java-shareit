@@ -42,9 +42,11 @@ public class RequestItemController {
 
 
     @GetMapping("/all")
-    public List<RequestItemDto> getAllRequestsItem() {
+    public List<RequestItemDto> getAllRequestsItem(
+            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        validation.userIdValidation(ownerId);
         log.info("Запрос: запрос на получение всех запросов пользователей)");
-        return requestItemService.getAll();
+        return requestItemService.getAllByOwnerIdRequest(ownerId);
     }
 
 

@@ -199,14 +199,54 @@ class RequestItemControllerTest {
     }
 
     @Test
-    void getAllRequests_ShouldReturnSuccess() throws Exception {
-        when(requestItemClient.getAllRequests()).thenReturn(successResponse);
+    void getAllRequests_WithValidOwnerId_ShouldReturnSuccess() throws Exception {
+        long ownerId = 1L;
+
+        when(requestItemClient.getAllRequests(ownerId)).thenReturn(successResponse);
 
         mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(requestItemClient, times(1)).getAllRequests();
+        verify(requestItemClient, times(1)).getAllRequests(ownerId);
+    }
+
+    @Test
+    void getAllRequests_WithoutUserIdHeader_ShouldReturnBadRequest() throws Exception {
+        mvc.perform(get("/requests/all")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError());
+
+        verify(requestItemClient, never()).getAllRequests(anyLong());
+    }
+
+    @Test
+    void getAllRequests_WithNegativeOwnerId_ShouldBeValid() throws Exception {
+        long ownerId = -1L;
+
+        when(requestItemClient.getAllRequests(ownerId)).thenReturn(successResponse);
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(requestItemClient, times(1)).getAllRequests(ownerId);
+    }
+
+    @Test
+    void getAllRequests_WithZeroOwnerId_ShouldBeValid() throws Exception {
+        long ownerId = 0L;
+
+        when(requestItemClient.getAllRequests(ownerId)).thenReturn(successResponse);
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(requestItemClient, times(1)).getAllRequests(ownerId);
     }
 
     @Test
@@ -333,5 +373,22 @@ class RequestItemControllerTest {
                 .andExpect(status().isBadRequest());
 
         verify(requestItemClient, times(1)).createRequest(eq(userId), any(NewRequestItem.class));
+    }
+
+    @Test
+    void handleBadRequest_FromClient_ForGetAllRequests_ShouldPropagateError() throws Exception {
+        long ownerId = 1L;
+        ResponseEntity<Object> badRequestResponse = ResponseEntity.status(400).body(
+                "{\"error\":\"Неверный запрос\",\"description\":\"Ошибка валидации\"}"
+        );
+
+        when(requestItemClient.getAllRequests(ownerId)).thenReturn(badRequestResponse);
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(requestItemClient, times(1)).getAllRequests(ownerId);
     }
 }

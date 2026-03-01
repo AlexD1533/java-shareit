@@ -35,8 +35,8 @@ public class RequestItemClient extends BaseClient {
         return get("", userId);
     }
 
-    public ResponseEntity<Object> getAllRequests() {
-        return get("/all");
+    public ResponseEntity<Object> getAllRequests(long ownerId) {  // Добавлен параметр ownerId
+        return get("/all", ownerId);
     }
 
     public ResponseEntity<Object> getRequestById(long requestId) {

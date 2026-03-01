@@ -70,32 +70,7 @@ public class RequestItemServiceImplTest {
         assertThat(userRequests.get(2).getDescription(), notNullValue());
     }
 
-    @Test
-    void getAll_ShouldReturnAllRequests() {
-        // Создаем первого пользователя
-        NewUserRequest userRequest1 = new NewUserRequest("John", "john@bk.com");
-        UserDto user1 = userService.create(userRequest1);
-        Long userId1 = user1.getId();
 
-        // Создаем второго пользователя
-        NewUserRequest userRequest2 = new NewUserRequest("Jane", "jane@bk.com");
-        UserDto user2 = userService.create(userRequest2);
-        Long userId2 = user2.getId();
-
-        // Создаем запросы от разных пользователей
-        NewRequestItem requestItem1 = new NewRequestItem("Trimmer");
-        NewRequestItem requestItem2 = new NewRequestItem("Photo Camera");
-        NewRequestItem requestItem3 = new NewRequestItem("Guitar");
-
-        requestItemService.create(userId1, requestItem1);
-        requestItemService.create(userId1, requestItem2);
-        requestItemService.create(userId2, requestItem3);
-
-        // Получаем все запросы
-        List<RequestItemDto> allRequests = requestItemService.getAll();
-
-        assertThat(allRequests.size(), equalTo(3));
-    }
 
     @Test
     void getRequestItemById_ShouldReturnRequest() {

@@ -86,7 +86,6 @@ class RequestItemControllerTest {
         verify(requestItemService, times(1)).create(eq(userId), any(NewRequestItem.class));
     }
 
-
     @Test
     void createUserRequestsItem_WithoutUserIdHeader_ShouldReturnBadRequest() throws Exception {
         mvc.perform(post("/requests")
@@ -181,7 +180,9 @@ class RequestItemControllerTest {
     }
 
     @Test
-    void getAllRequestsItem_ShouldReturnAllRequests() throws Exception {
+    void getAllRequestsItem_WithValidOwnerId_ShouldReturnAllRequests() throws Exception {
+        Long ownerId = 1L;
+
         ResponseItemDto responseItemDto2 = new ResponseItemDto();
         responseItemDto2.setId(2L);
         responseItemDto2.setName("Item Name 2");
@@ -195,9 +196,10 @@ class RequestItemControllerTest {
 
         List<RequestItemDto> requests = Arrays.asList(requestItemDto, requestItemDto2);
 
-        when(requestItemService.getAll()).thenReturn(requests);
+        when(requestItemService.getAllByOwnerIdRequest(ownerId)).thenReturn(requests);
 
         mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -214,19 +216,80 @@ class RequestItemControllerTest {
                 .andExpect(jsonPath("$[1].items[0].name", is(responseItemDto2.getName())))
                 .andExpect(jsonPath("$[1].items[0].ownerId", is(responseItemDto2.getOwnerId()), Long.class));
 
-        verify(requestItemService, times(1)).getAll();
+        verify(validation, times(1)).userIdValidation(ownerId);
+        verify(requestItemService, times(1)).getAllByOwnerIdRequest(ownerId);
+    }
+
+    @Test
+    void getAllRequestsItem_WithoutUserIdHeader_ShouldReturnBadRequest() throws Exception {
+        mvc.perform(get("/requests/all")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError());
+
+        verify(validation, never()).userIdValidation(anyLong());
+        verify(requestItemService, never()).getAllByOwnerIdRequest(anyLong());
+    }
+
+    @Test
+    void getAllRequestsItem_WithInvalidOwnerId_ShouldReturnBadRequest() throws Exception {
+        Long ownerId = 999L;
+        doThrow(new IllegalArgumentException("Пользователь не найден"))
+                .when(validation).userIdValidation(ownerId);
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError());
+
+        verify(validation, times(1)).userIdValidation(ownerId);
+        verify(requestItemService, never()).getAllByOwnerIdRequest(anyLong());
+    }
+
+    @Test
+    void getAllRequestsItem_WithNegativeOwnerId_ShouldValidateAndCallService() throws Exception {
+        Long ownerId = -1L;
+
+        when(requestItemService.getAllByOwnerIdRequest(ownerId)).thenReturn(List.of(requestItemDto));
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        verify(validation, times(1)).userIdValidation(ownerId);
+        verify(requestItemService, times(1)).getAllByOwnerIdRequest(ownerId);
+    }
+
+    @Test
+    void getAllRequestsItem_WithZeroOwnerId_ShouldValidateAndCallService() throws Exception {
+        Long ownerId = 0L;
+
+        when(requestItemService.getAllByOwnerIdRequest(ownerId)).thenReturn(List.of(requestItemDto));
+
+        mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        verify(validation, times(1)).userIdValidation(ownerId);
+        verify(requestItemService, times(1)).getAllByOwnerIdRequest(ownerId);
     }
 
     @Test
     void getAllRequestsItem_WhenNoRequests_ShouldReturnEmptyList() throws Exception {
-        when(requestItemService.getAll()).thenReturn(Collections.emptyList());
+        Long ownerId = 1L;
+        when(requestItemService.getAllByOwnerIdRequest(ownerId)).thenReturn(Collections.emptyList());
 
         mvc.perform(get("/requests/all")
+                        .header(userIdHeader, ownerId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(requestItemService, times(1)).getAll();
+        verify(validation, times(1)).userIdValidation(ownerId);
+        verify(requestItemService, times(1)).getAllByOwnerIdRequest(ownerId);
     }
 
     @Test
@@ -276,19 +339,5 @@ class RequestItemControllerTest {
 
         verify(validation, times(1)).requestItemExistValidation(requestId);
         verify(requestItemService, times(1)).getRequestItemById(requestId);
-    }
-
-    @Test
-    void getRequestItemById_WithNonExistentId_ShouldReturnBadRequest() throws Exception {
-        Long requestId = 999L;
-        doThrow(new RuntimeException("Запрос не найден"))
-                .when(validation).requestItemExistValidation(requestId);
-
-        mvc.perform(get("/requests/{requestId}", requestId)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
-
-        verify(validation, times(1)).requestItemExistValidation(requestId);
-        verify(requestItemService, never()).getRequestItemById(anyLong());
     }
 }

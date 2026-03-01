@@ -174,6 +174,7 @@ class RequestItemClientTest {
 
     @Test
     void testGetAllRequests() {
+        long ownerId = 1L;
         ResponseEntity<Object> expectedResponse = ResponseEntity.ok("success");
 
         when(restTemplate.exchange(
@@ -183,13 +184,14 @@ class RequestItemClientTest {
                 eq(Object.class)))
                 .thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = requestItemClient.getAllRequests();
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
 
         assertThat(response, equalTo(expectedResponse));
     }
 
     @Test
     void testGetAllRequests_WithEmptyList() {
+        long ownerId = 1L;
         ResponseEntity<Object> emptyResponse = ResponseEntity.ok("[]");
 
         when(restTemplate.exchange(
@@ -199,10 +201,44 @@ class RequestItemClientTest {
                 eq(Object.class)))
                 .thenReturn(emptyResponse);
 
-        ResponseEntity<Object> response = requestItemClient.getAllRequests();
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat(response.getBody(), equalTo("[]"));
+    }
+
+    @Test
+    void testGetAllRequests_WithZeroOwnerId() {
+        long ownerId = 0L;
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok("success");
+
+        when(restTemplate.exchange(
+                anyString(),
+                eq(HttpMethod.GET),
+                org.mockito.ArgumentMatchers.any(),
+                eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
+
+        assertThat(response, equalTo(expectedResponse));
+    }
+
+    @Test
+    void testGetAllRequests_WithNegativeOwnerId() {
+        long ownerId = -1L;
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok("success");
+
+        when(restTemplate.exchange(
+                anyString(),
+                eq(HttpMethod.GET),
+                org.mockito.ArgumentMatchers.any(),
+                eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
+
+        assertThat(response, equalTo(expectedResponse));
     }
 
     @Test
@@ -334,6 +370,7 @@ class RequestItemClientTest {
 
     @Test
     void testGetAllRequests_WithServerError() {
+        long ownerId = 1L;
         ResponseEntity<Object> errorResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Internal server error");
 
@@ -344,10 +381,29 @@ class RequestItemClientTest {
                 eq(Object.class)))
                 .thenReturn(errorResponse);
 
-        ResponseEntity<Object> response = requestItemClient.getAllRequests();
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.INTERNAL_SERVER_ERROR));
         assertThat(response.getBody(), equalTo("Internal server error"));
+    }
+
+    @Test
+    void testGetAllRequests_WithNotFound() {
+        long ownerId = 1L;
+        ResponseEntity<Object> notFoundResponse = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Not found");
+
+        when(restTemplate.exchange(
+                anyString(),
+                eq(HttpMethod.GET),
+                org.mockito.ArgumentMatchers.any(),
+                eq(Object.class)))
+                .thenReturn(notFoundResponse);
+
+        ResponseEntity<Object> response = requestItemClient.getAllRequests(ownerId);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+        assertThat(response.getBody(), equalTo("Not found"));
     }
 
     @Test
